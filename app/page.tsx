@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center font-mono uppercase p-4">
-      <div className="text-center max-w-2xl p-20 mx-auto">
+      <div className="text-center max-w-3xl p-16 mx-auto">
         <Image
           src="color/flowers/peony.png"
           alt="anemone flower"
@@ -21,7 +21,9 @@ export default function Home() {
           className="object-cover mx-auto"
           priority
         />
-        <p className="text-sm mb-8">beautiful flowers delivered digitally</p>
+        <p className="text-sm my-6 md:mb-4">
+          beautiful flowers <br /> delivered digitally
+        </p>
         <div className="flex flex-col items-center justify-center">
           <Link
             href="/bouquet?mode=color"
