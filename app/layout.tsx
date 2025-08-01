@@ -15,6 +15,11 @@ export const metadata: Metadata = {
   },
   title: "digibouquet",
   description: "create and share a digital flower bouquet",
+  openGraph: {
+    title: "digibouquet",
+    description: "create and share a digital flower bouquet",
+    images: ["https://digibouquet.vercel.app/metapreview.png"],
+  },
 };
 
 export default function RootLayout({
