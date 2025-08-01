@@ -47,8 +47,6 @@ export default function BouquetCustomizer({
       (sum, flower) => sum + flower.count,
       0
     );
-
-    // console.log(bouquet.mode);
     // Create an array of indices from 0 to totalFlowers-1
     const indices = Array.from({ length: totalFlowers }, (_, i) => i);
 

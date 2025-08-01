@@ -1,31 +1,21 @@
-// app/bouquet/[id]/page.tsx
-import { supabase } from "@/lib/supabase"; // we'll make this below
+// app/bouquet/page.tsx
+import { supabase } from "@/lib/supabase";
 import Image from "next/image";
-import BouquetOnly from "../bouquet/components/BouquetOnly";
 import Link from "next/link";
+import BouquetOnly from "../bouquet/components/BouquetOnly";
 
-interface Params {
-  params: {
-    id: string;
-  };
-}
-
-export default async function BouquetPage({ params }: Params) {
-  const { id } = params;
-
+export default async function AllBouquetsPage() {
   const { data, error } = await supabase
     .from("bouquets")
-    .select()
-    .eq("id", id)
-    .single();
+    .select("*")
+    .order("created_at", { ascending: false }); // optional: sort by latest
 
   if (error || !data) {
-    return <div>404 - Bouquet not found</div>;
+    return <div>Error fetching bouquets.</div>;
   }
 
   return (
     <div className="text-center p-6">
-      {/* Logo/Branding */}
       <Link href="/">
         <Image
           src="/digibouquet.png"
@@ -35,9 +25,29 @@ export default async function BouquetPage({ params }: Params) {
           className="object-cover mx-auto my-10"
           priority
         />
-      </Link>{" "}
-      <BouquetOnly bouquet={data} />
-      <p className="text-sm text-gray-500">
+      </Link>
+
+      {/* Page title */}
+      <h2 className="text-md uppercase mb-4 ">OUR GARDEN</h2>
+      <p className="text-sm opacity-50 mb-10">Thanks for stopping by!</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
+        {data.map((bouquet) => (
+          //   <Link href={`/bouquet/${bouquet.id}`} key={bouquet.id}>
+          <div>
+            <div>
+              <BouquetOnly bouquet={bouquet} />
+            </div>
+            <p className="text-sm text-gray-500">
+              {new Date(bouquet.created_at).toLocaleDateString()}
+            </p>
+          </div>
+
+          //   </Link>
+        ))}
+      </div>
+
+      <p className="text-sm text-gray-500 mt-10">
         made with digibouquet, a tool by{" "}
         <Link
           href="https://x.com/pau_wee_"
@@ -46,7 +56,7 @@ export default async function BouquetPage({ params }: Params) {
           @pau_wee_
         </Link>
       </p>
-      <Link href="" className="text-sm underline text-gray-500 mt-2">
+      <Link href="/" className="text-sm underline text-gray-500 mt-2 block">
         make a bouquet now!
       </Link>
     </div>
