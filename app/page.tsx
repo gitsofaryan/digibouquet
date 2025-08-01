@@ -36,7 +36,7 @@ export default function Home() {
             href="/bouquet?mode=mono"
             className="text-sm px-8 py-4 border border-black text-[#000000] hover:bg-[#F5F5AC]/90 m-2"
           >
-            MONO
+            BUILD IT IN BLACK AND WHITE
           </Link>
           <Link
             href="/garden"
@@ -45,6 +45,16 @@ export default function Home() {
             VIEW GARDEN
           </Link>
         </div>
+
+        <p className="text-sm text-gray-500 mt-10">
+          made by{" "}
+          <Link
+            href="https://x.com/pau_wee_"
+            className="text-sm underline text-gray-500 mt-2"
+          >
+            @pau_wee_
+          </Link>
+        </p>
       </div>
     </div>
   );
