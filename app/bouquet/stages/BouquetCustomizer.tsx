@@ -21,7 +21,7 @@ export default function BouquetCustomizer({
     greenery: number;
     timestamp: number;
     mode: string;
-    flowerOrder?: number[];
+    flowerOrder: number[];
   };
   // Function to update the bouquet state
   // Mode parameter - can be "mono" or "full" for different styling/behavior
@@ -31,7 +31,7 @@ export default function BouquetCustomizer({
       greenery: number;
       timestamp: number;
       mode: string;
-      flowerOrder?: number[];
+      flowerOrder: number[];
       letter: {
         sender: string;
         recipient: string;
@@ -136,12 +136,13 @@ export default function BouquetCustomizer({
                     const rotation = Math.random() * 10 - 5;
 
                     // Determine the visual order of this flower instance
-                    // If flowerOrder exists, use it; otherwise use default order
-                    const index = bouquet.flowerOrder?.length
-                      ? bouquet.flowerOrder[
-                          flowerIndex * flower.count + instanceIndex
-                        ] ?? flowerIndex * flower.count + instanceIndex
-                      : flowerIndex * flower.count + instanceIndex;
+                    // If flowerOrder has values, use it; otherwise use default order
+                    const index =
+                      bouquet.flowerOrder.length > 0
+                        ? bouquet.flowerOrder[
+                            flowerIndex * flower.count + instanceIndex
+                          ] ?? flowerIndex * flower.count + instanceIndex
+                        : flowerIndex * flower.count + instanceIndex;
 
                     // Get dimensions based on flower size
                     const dimensions = getFlowerDimensions(flowerData.size);

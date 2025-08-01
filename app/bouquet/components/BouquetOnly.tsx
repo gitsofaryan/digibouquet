@@ -18,7 +18,7 @@ export default function BouquetOnly({
     greenery: number;
     timestamp: number;
     mode: string;
-    flowerOrder?: number[];
+    flowerOrder: number[];
   };
 }) {
   // Helper function to get flower dimensions based on size
