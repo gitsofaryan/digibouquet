@@ -21,7 +21,7 @@ export default function Home() {
           className="object-cover mx-auto"
           priority
         />
-        <p className="text-sm my-6 md:mb-4">
+        <p className="text-sm my-6 md:mb-6 md:-mt-6">
           beautiful flowers <br /> delivered digitally
         </p>
         <div className="flex flex-col items-center justify-center">
