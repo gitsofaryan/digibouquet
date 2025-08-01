@@ -25,33 +25,20 @@ export default function BouquetCustomizer({
   };
   // Function to update the bouquet state
   // Mode parameter - can be "mono" or "full" for different styling/behavior
-  setBouquet: (
-    bouquet:
-      | {
-          flowers?: Array<{ id: number; count: number }>;
-          greenery?: number;
-          timestamp?: number;
-          mode?: string;
-          flowerOrder?: number[];
-          letter?: {
-            sender?: string;
-            recipient?: string;
-            message?: string;
-          };
-        }
-      | ((prev: {
-          flowers: Array<{ id: number; count: number }>;
-          greenery: number;
-          timestamp: number;
-          mode: string;
-          flowerOrder?: number[];
-          letter: {
-            sender: string;
-            recipient: string;
-            message: string;
-          };
-        }) => any)
-  ) => void;
+  setBouquet: React.Dispatch<
+    React.SetStateAction<{
+      flowers: Array<{ id: number; count: number }>;
+      greenery: number;
+      timestamp: number;
+      mode: string;
+      flowerOrder?: number[];
+      letter: {
+        sender: string;
+        recipient: string;
+        message: string;
+      };
+    }>
+  >;
 }) {
   // Function to randomize the arrangement of flowers
   const randomizeFlowers = () => {
@@ -69,16 +56,14 @@ export default function BouquetCustomizer({
       const j = Math.floor(Math.random() * (i + 1));
       [indices[i], indices[j]] = [indices[j], indices[i]];
     }
-
-    // Update the flower order in the bouquet state
-    setBouquet((prev: { flowerOrder?: number[] }) => ({
+    setBouquet((prev) => ({
       ...prev,
       flowerOrder: indices,
     }));
   };
 
   const changeGreenery = () => {
-    setBouquet((prev: { greenery: number }) => ({
+    setBouquet((prev) => ({
       ...prev,
       greenery: (prev.greenery + 1) % 3,
     }));

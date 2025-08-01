@@ -36,33 +36,20 @@ export default function FlowerPicker({
     flowerOrder?: number[];
   };
   // Function to update the bouquet state
-  setBouquet: (
-    bouquet:
-      | {
-          flowers?: Array<{ id: number; count: number }>;
-          greenery?: number;
-          timestamp?: number;
-          mode?: string;
-          flowerOrder?: number[];
-          letter?: {
-            sender?: string;
-            recipient?: string;
-            message?: string;
-          };
-        }
-      | ((prev: {
-          flowers: Array<{ id: number; count: number }>;
-          greenery: number;
-          timestamp: number;
-          mode: string;
-          flowerOrder?: number[];
-          letter: {
-            sender: string;
-            recipient: string;
-            message: string;
-          };
-        }) => any)
-  ) => void;
+  setBouquet: React.Dispatch<
+    React.SetStateAction<{
+      flowers: Array<{ id: number; count: number }>;
+      greenery: number;
+      timestamp: number;
+      mode: string;
+      flowerOrder?: number[];
+      letter: {
+        sender: string;
+        recipient: string;
+        message: string;
+      };
+    }>
+  >;
 }) {
   // Track which flower is currently being hovered over for tooltip display
   const [hoveredFlower, setHoveredFlower] = useState<{
