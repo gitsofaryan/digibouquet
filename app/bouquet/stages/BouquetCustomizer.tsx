@@ -103,7 +103,7 @@ export default function BouquetCustomizer({
         <h2 className="text-md uppercase text-center mb-6">
           Customize Your Bouquet
         </h2>
-        <div className="space-y-8 flex flex-col items-center justify-center">
+        <div className="space-y-4 flex flex-col items-center justify-center">
           {/* Randomize button - shuffles the flower arrangement */}
           <button
             onClick={randomizeFlowers}

@@ -66,7 +66,9 @@ export default function ShareBouquet({
     <div className="text-center">
       <div className="flex flex-col max-w-screen-lg mx-auto bg-black rounded-full">
         <div className=" p-6">
-          <h2 className="text-md uppercase text-center mb-6">SEND IT OFF</h2>
+          <h2 className="text-md uppercase text-center mb-6">
+            SEND THE BOUQUET
+          </h2>
           <div className="space-y-8 flex flex-col items-center justify-center"></div>
         </div>
 
@@ -181,6 +183,15 @@ export default function ShareBouquet({
             </div>
           </div>
         </div>
+        {/* Randomize button - shuffles the flower arrangement */}
+        <button
+          onClick={() => {
+            console.log("Sending bouquet");
+          }}
+          className="uppercase text-white bg-black px-5 py-3"
+        >
+          SEND BOUQUET
+        </button>
       </div>
     </div>
   );
