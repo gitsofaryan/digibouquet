@@ -24,7 +24,7 @@ export default async function BouquetPage({ params }: Params) {
   }
 
   return (
-    <div className="text-center p-6">
+    <div className="text-center p-6 bg-[#F9F9EE]">
       {/* Logo/Branding */}
       <Link href="/">
         <Image
@@ -35,7 +35,8 @@ export default async function BouquetPage({ params }: Params) {
           className="object-cover mx-auto my-10"
           priority
         />
-      </Link>{" "}
+      </Link>
+      <h2 className="text-lg mb-14 ">Hi, I made this bouquet for you!</h2>
       <Bouquet bouquet={data} />
       <p className="text-sm text-gray-500">
         made with digibouquet, a tool by{" "}
