@@ -38,7 +38,7 @@ export default async function AllBouquetsPage() {
             <div>
               <BouquetOnly bouquet={bouquet} />
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 m-10">
               {new Date(bouquet.created_at).toLocaleDateString()}
             </p>
           </div>
