@@ -87,7 +87,7 @@ export default function ShareBouquet({
 
   return (
     <div className="text-center">
-      <h2 className="text-md uppercase text-center mb-6">SEND THE BOUQUET</h2>
+      <h2 className="text-md uppercase text-center mb-10">SEND THE BOUQUET</h2>
 
       <Bouquet bouquet={bouquet} />
       <button
