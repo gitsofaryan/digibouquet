@@ -46,19 +46,6 @@ export default async function AllBouquetsPage() {
           //   </Link>
         ))}
       </div>
-
-      <p className="text-sm text-gray-500 mt-10">
-        made with digibouquet, a tool by{" "}
-        <Link
-          href="https://x.com/pau_wee_"
-          className="text-sm underline text-gray-500 mt-2"
-        >
-          @pau_wee_
-        </Link>
-      </p>
-      <Link href="/" className="text-sm underline text-gray-500 mt-2 block">
-        make a bouquet now!
-      </Link>
     </div>
   );
 }

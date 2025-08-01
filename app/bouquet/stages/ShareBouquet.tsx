@@ -89,7 +89,7 @@ export default function ShareBouquet({
         }}
         className="uppercase text-white bg-black px-5 py-3"
       >
-        SEND BOUQUET
+        CREATE SHAREABLE LINK
       </button>
     </div>
   );
