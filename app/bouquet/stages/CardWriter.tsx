@@ -20,66 +20,52 @@ export default function CardWriter({
     mode: string;
     flowerOrder?: number[];
   };
-  // Function to update the bouquet state
-  setBouquet: (
-    bouquet:
-      | {
-          flowers?: Array<{ id: number; count: number }>;
-          greenery?: number;
-          timestamp?: number;
-          mode?: string;
-          flowerOrder?: number[];
-          letter?: {
-            sender?: string;
-            recipient?: string;
-            message?: string;
-          };
-        }
-      | ((prev: {
-          flowers: Array<{ id: number; count: number }>;
-          greenery: number;
-          timestamp: number;
-          mode: string;
-          flowerOrder?: number[];
-          letter: {
-            sender: string;
-            recipient: string;
-            message: string;
-          };
-        }) => any)
-  ) => void;
+  setBouquet: React.Dispatch<
+    React.SetStateAction<{
+      flowers: Array<{ id: number; count: number }>;
+      greenery: number;
+      timestamp: number;
+      mode: string;
+      flowerOrder?: number[];
+      letter: {
+        sender: string;
+        recipient: string;
+        message: string;
+      };
+    }>
+  >;
 }) {
   return (
     <div className="text-center">
       <div>
-        <h2 className="text-md mb-8">WRITE THE CARD</h2>
+        <h2 className="text-md my-8">WRITE THE CARD</h2>
         <div className="flex flex-row items-center justify-center">
           {/* White card container with black border */}
           <div className="flex flex-row items-center justify-center -space-x-12">
             <Image
-              src={`/full/flowers/rose.png`}
+              src={`/full/flowers/daisy.png`}
               alt="card front"
-              width={160}
+              width={140}
               height={200}
               className="-rotate-12 hover:-translate-y-4 transition-all duration-300"
             />
             <Image
-              src={`/full/flowers/zinnia.png`}
+              src={`/full/flowers/lily.png`}
               alt="card front"
-              width={160}
+              width={140}
               height={200}
               className="-translate-y-5 hover:-translate-y-4 transition-all duration-300"
             />
             <Image
               src={`/full/flowers/anemone.png`}
               alt="card front"
-              width={160}
+              width={140}
               height={200}
               className="rotate-12 hover:-translate-y-4 transition-all duration-300"
             />
           </div>
 
-          <div className="bg-white border-2 border-black p-10 max-w-lg mx-auto">
+          <div className="bg-white border-2 border-black p-10 max-w-lg mx-10">
             <div className="space-y-4">
               <div className="flex flex-row items-left justify-left gap-2">
                 <label htmlFor="recipient">Dear </label>
@@ -95,7 +81,7 @@ export default function CardWriter({
                       },
                     }))
                   }
-                  placeholder="Someone,"
+                  placeholder="Beloved,"
                   className="border-none bg-transparent focus:outline-none focus:ring-0"
                 />{" "}
               </div>
@@ -145,21 +131,21 @@ export default function CardWriter({
             <Image
               src={`/full/flowers/carnation.png`}
               alt="card front"
-              width={160}
+              width={140}
               height={200}
               className="-rotate-12 hover:-translate-y-4 transition-all duration-300"
             />
             <Image
               src={`/full/flowers/sunflower.png`}
               alt="card front"
-              width={160}
+              width={140}
               height={200}
               className="-translate-y-5 hover:-translate-y-4 transition-all duration-300"
             />
             <Image
               src={`/full/flowers/peony.png`}
               alt="card front"
-              width={160}
+              width={140}
               height={200}
               className="rotate-12 hover:-translate-y-4 transition-all duration-300"
             />

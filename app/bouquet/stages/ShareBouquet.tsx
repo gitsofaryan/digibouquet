@@ -1,5 +1,9 @@
 import Image from "next/image";
 import { flowers } from "../../data/data";
+import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
+import { nanoid } from "nanoid";
+import Bouquet from "../components/Bouquet";
 
 export default function ShareBouquet({
   bouquet,
@@ -33,137 +37,68 @@ export default function ShareBouquet({
     }
   };
 
+  const router = useRouter();
+
+  const handleCreateBouquet = async (bouquet: {
+    mode: string;
+    flowers: Array<{ id: number; count: number }>;
+    letter: {
+      sender: string;
+      recipient: string;
+      message: string;
+    };
+    timestamp: number;
+    greenery: number;
+    flowerOrder?: number[];
+  }) => {
+    console.log(bouquet);
+    console.log(bouquet.flowerOrder);
+    console.log(bouquet.letter);
+    console.log(bouquet.flowers);
+    console.log(bouquet.greenery);
+    console.log(bouquet.mode);
+    console.log(bouquet.timestamp);
+
+    const short_id = nanoid(8);
+
+    const { data, error } = await supabase
+      .from("bouquets")
+      .insert([
+        {
+          short_id: short_id,
+          mode: bouquet.mode,
+          flowers: bouquet.flowers,
+          letter: bouquet.letter,
+          timestamp: bouquet.timestamp,
+          greenery: bouquet.greenery,
+          flowerOrder: bouquet.flowerOrder ?? null,
+        },
+      ])
+      .select(); // returns inserted row(s)
+
+    if (error || !data || data.length === 0) {
+      console.error("Error creating bouquet:", error);
+      return;
+    }
+
+    const bouquetId = data[0].id;
+    router.push(`/bouquet/${bouquetId}`);
+  };
+
   return (
     <div className="text-center">
-      <div className="flex flex-col max-w-screen-lg mx-auto bg-black rounded-full">
-        <div className=" p-6">
-          <h2 className="text-md uppercase text-center mb-6">
-            SEND THE BOUQUET
-          </h2>
-          <div className="space-y-8 flex flex-col items-center justify-center"></div>
-        </div>
+      <h2 className="text-md uppercase text-center mb-6">SEND THE BOUQUET</h2>
 
-        <div className="flex items-center justify-center relative py-4 my-16">
-          <div className="relative w-[500px] min-h-[410px]">
-            {/* Bush background images - positioned absolutely to stay fixed */}
-            {/* Bottom bush layer */}
-
-            <Image
-              src={`${bouquet.mode}/bush/bush-${bouquet.greenery + 1}.png`}
-              alt="bush background"
-              width={600}
-              height={500}
-              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0"
-              priority
-            />
-
-            {/* Flower container - flowers can move around within this area */}
-
-            <div className="flex flex-wrap reverse w-[300px] justify-center items-center -space-x-4 -space-y-20 relative m-auto">
-              {/* Map through each flower type and create individual flower instances */}
-              {bouquet.flowers.flatMap(
-                (
-                  flower: { id: number; count: number },
-                  flowerIndex: number
-                ) => {
-                  // Get flower data from the imported flowers array
-                  const flowerData = flowers.find((f) => f.id === flower.id);
-                  if (!flowerData) return [];
-
-                  // For each flower type, create the specified number of instances
-                  return Array(flower.count)
-                    .fill(null)
-                    .map((_, instanceIndex) => {
-                      // Generate random rotation for each flower (-5 to +5 degrees)
-                      const rotation = Math.random() * 10 - 5;
-
-                      // Determine the visual order of this flower instance
-                      // If flowerOrder exists, use it; otherwise use default order
-                      const index = bouquet.flowerOrder?.length
-                        ? bouquet.flowerOrder[
-                            flowerIndex * flower.count + instanceIndex
-                          ] ?? flowerIndex * flower.count + instanceIndex
-                        : flowerIndex * flower.count + instanceIndex;
-
-                      // Get dimensions based on flower size
-                      const dimensions = getFlowerDimensions(flowerData.size);
-
-                      return (
-                        <div
-                          key={`${flowerIndex}-${instanceIndex}`}
-                          className="flex items-center justify-center pt-4 relative"
-                          style={{ order: index }} // CSS order property controls visual arrangement
-                        >
-                          {/* Individual flower image */}
-                          <Image
-                            src={`${bouquet.mode}/flowers/${flowerData.name}.png`}
-                            alt={flowerData.name}
-                            width={dimensions}
-                            height={dimensions}
-                            className="relative z-10 transition-transform hover:scale-105"
-                            style={{ transform: `rotate(${rotation}deg)` }} // Apply random rotation
-                            priority
-                          />
-                        </div>
-                      );
-                    });
-                }
-              )}
-            </div>
-
-            {/* Top bush layer */}
-
-            <div>
-              <Image
-                src={`${bouquet.mode}/bush/bush-${
-                  bouquet.greenery + 1
-                }-top.png`}
-                alt="bush top"
-                width={600}
-                height={500}
-                className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="text-center max-w-sm mx-auto">
-        <div>
-          {/* White card container with black border */}
-          <div className="bg-white border-[1.5px] border-black p-8 mx-auto -translate-y-[70px] -rotate-2 hover:-rotate-2 transition-all duration-300">
-            <div className="space-y-4">
-              <div className="flex flex-row items-left justify-left gap-2">
-                <p className="border-none bg-transparent focus:outline-none focus:ring-0">
-                  Dear {bouquet.letter.recipient}
-                </p>
-              </div>
-
-              <div className="text-left">
-                <p>{bouquet.letter.message}</p>
-              </div>
-
-              <div className="flex flex-col items-end justify-end gap-2">
-                <p className="border-none bg-transparent focus:outline-none focus:ring-0">
-                  Sincerely,
-                </p>
-                <p className="border-none bg-transparent focus:outline-none focus:ring-0">
-                  {bouquet.letter.sender}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* Randomize button - shuffles the flower arrangement */}
-        <button
-          onClick={() => {
-            console.log("Sending bouquet");
-          }}
-          className="uppercase text-white bg-black px-5 py-3"
-        >
-          SEND BOUQUET
-        </button>
-      </div>
+      <Bouquet bouquet={bouquet} />
+      <button
+        onClick={() => {
+          console.log("Sending bouquet");
+          handleCreateBouquet(bouquet);
+        }}
+        className="uppercase text-white bg-black px-5 py-3"
+      >
+        SEND BOUQUET
+      </button>
     </div>
   );
 }
