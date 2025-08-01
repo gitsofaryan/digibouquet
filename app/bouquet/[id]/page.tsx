@@ -30,7 +30,7 @@ export default async function BouquetPage({ params }: Params) {
         <Image
           src="/digibouquet.png"
           alt="digibouquet"
-          width={140}
+          width={200}
           height={80}
           className="object-cover mx-auto my-10"
           priority
