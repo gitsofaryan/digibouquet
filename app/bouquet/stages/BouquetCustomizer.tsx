@@ -48,6 +48,7 @@ export default function BouquetCustomizer({
       0
     );
 
+    // console.log(bouquet.mode);
     // Create an array of indices from 0 to totalFlowers-1
     const indices = Array.from({ length: totalFlowers }, (_, i) => i);
 
@@ -111,7 +112,7 @@ export default function BouquetCustomizer({
           {/* Bottom bush layer */}
 
           <Image
-            src={`${bouquet.mode}/bush/bush-${bouquet.greenery + 1}.png`}
+            src={`/${bouquet.mode}/bush/bush-${bouquet.greenery + 1}.png`}
             alt="bush background"
             width={600}
             height={500}
@@ -174,7 +175,7 @@ export default function BouquetCustomizer({
 
           <div>
             <Image
-              src={`${bouquet.mode}/bush/bush-${bouquet.greenery + 1}-top.png`}
+              src={`/${bouquet.mode}/bush/bush-${bouquet.greenery + 1}-top.png`}
               alt="bush top"
               width={600}
               height={500}
