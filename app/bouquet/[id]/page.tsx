@@ -24,7 +24,7 @@ export default async function BouquetPage({ params }: Params) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center m-6">
+    <div className="text-center p-6">
       {/* Logo/Branding */}
       <Link href="/">
         <Image
@@ -32,7 +32,7 @@ export default async function BouquetPage({ params }: Params) {
           alt="digibouquet"
           width={140}
           height={80}
-          className="object-cover mx-auto my-6"
+          className="object-cover mx-auto my-10"
           priority
         />
       </Link>{" "}

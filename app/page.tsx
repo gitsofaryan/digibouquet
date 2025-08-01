@@ -6,7 +6,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center font-mono uppercase p-4">
       <div className="text-center max-w-2xl p-20 mx-auto">
         <Image
-          src="color/flowers/carnation.png"
+          src="color/flowers/peony.png"
           alt="anemone flower"
           width={100}
           height={100}
@@ -21,11 +21,8 @@ export default function Home() {
           className="object-cover mx-auto"
           priority
         />
-        <p className="text-sm mb-8">
-          flowers, <br></br>
-          delivered digitally
-        </p>
-        <div className="flex flex-row items-center justify-center">
+        <p className="text-sm mb-8">beautiful flowers delivered digitally</p>
+        <div className="flex flex-col items-center justify-center">
           <Link
             href="/bouquet?mode=color"
             className="text-sm px-8 py-4 bg-[#000000] text-[#F5F5DC] hover:bg-[#0A0000]/90 m-2"
