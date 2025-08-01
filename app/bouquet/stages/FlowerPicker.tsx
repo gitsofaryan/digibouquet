@@ -133,12 +133,12 @@ export default function FlowerPicker({
   return (
     <div className="text-center  dfont-crimson h-full">
       {/* Page title */}
-      <h2 className="text-md uppercase mb-4 ">Pick some Flowers</h2>
+      <h2 className="text-md uppercase mb-4 ">Pick 6 to 10 BLOOMS</h2>
 
       {/* Help text - only show if flowers are selected */}
       {totalFlowers > 0 && (
         <p className="text-sm opacity-50 mb-8">
-          Pick 6 to 10 blooms. Click on a flower's name to deselect it.
+          Click on a flower's name to deselect it.
         </p>
       )}
 

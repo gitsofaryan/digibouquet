@@ -10,8 +10,11 @@ const martianMono = Martian_Mono({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: "/favicon.ico",
+  },
   title: "digibouquet",
-  description: "Create and share a digital flower bouquet for Valentine's Day",
+  description: "create and share a digital flower bouquet",
 };
 
 export default function RootLayout({
