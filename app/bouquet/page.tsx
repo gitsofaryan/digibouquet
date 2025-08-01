@@ -35,7 +35,7 @@ export default function Home({
     };
     timestamp: number;
     greenery: number;
-    flowerOrder?: number[];
+    flowerOrder: number[];
   }>({
     mode: mode,
     flowers: [],
@@ -46,6 +46,7 @@ export default function Home({
     },
     greenery: 0,
     timestamp: Date.now(),
+    flowerOrder: [],
   });
   // Calculate total flowers for button validation
   const totalFlowers = bouquet.flowers.reduce(

@@ -18,7 +18,7 @@ export default function CardWriter({
     greenery: number;
     timestamp: number;
     mode: string;
-    flowerOrder?: number[];
+    flowerOrder: number[];
   };
   setBouquet: React.Dispatch<
     React.SetStateAction<{
@@ -26,7 +26,7 @@ export default function CardWriter({
       greenery: number;
       timestamp: number;
       mode: string;
-      flowerOrder?: number[];
+      flowerOrder: number[];
       letter: {
         sender: string;
         recipient: string;

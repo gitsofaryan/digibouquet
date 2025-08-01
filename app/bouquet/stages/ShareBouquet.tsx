@@ -22,7 +22,7 @@ export default function ShareBouquet({
     greenery: number;
     timestamp: number;
     mode: string;
-    flowerOrder?: number[];
+    flowerOrder: number[];
   };
 }) {
   // Helper function to get flower dimensions based on size
@@ -49,7 +49,7 @@ export default function ShareBouquet({
     };
     timestamp: number;
     greenery: number;
-    flowerOrder?: number[];
+    flowerOrder: number[];
   }) => {
     const short_id = nanoid(8);
 
@@ -63,7 +63,7 @@ export default function ShareBouquet({
           letter: bouquet.letter,
           timestamp: bouquet.timestamp,
           greenery: bouquet.greenery,
-          flowerOrder: bouquet.flowerOrder ?? null,
+          flowerOrder: bouquet.flowerOrder,
         },
       ])
       .select(); // returns inserted row(s)

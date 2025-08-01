@@ -18,7 +18,7 @@ export default function Bouquet({
     greenery: number;
     timestamp: number;
     mode: string;
-    flowerOrder?: number[];
+    flowerOrder: number[];
   };
 }) {
   // Helper function to get flower dimensions based on size
@@ -71,12 +71,13 @@ export default function Bouquet({
                       const rotation = Math.random() * 10 - 5;
 
                       // Determine the visual order of this flower instance
-                      // If flowerOrder exists, use it; otherwise use default order
-                      const index = bouquet.flowerOrder?.length
-                        ? bouquet.flowerOrder[
-                            flowerIndex * flower.count + instanceIndex
-                          ] ?? flowerIndex * flower.count + instanceIndex
-                        : flowerIndex * flower.count + instanceIndex;
+                      // If flowerOrder has values, use it; otherwise use default order
+                      const index =
+                        bouquet.flowerOrder.length > 0
+                          ? bouquet.flowerOrder[
+                              flowerIndex * flower.count + instanceIndex
+                            ] ?? flowerIndex * flower.count + instanceIndex
+                          : flowerIndex * flower.count + instanceIndex;
 
                       // Get dimensions based on flower size
                       const dimensions = getFlowerDimensions(flowerData.size);
