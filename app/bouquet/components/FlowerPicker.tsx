@@ -181,7 +181,9 @@ export default function FlowerPicker({
             {/* Flower image container with dynamic sizing based on flower size */}
             <div
               className={`${
-                flower.size === "small"
+                mode === "full"
+                  ? "w-[150px] h-[258px]"
+                  : flower.size === "small"
                   ? "w-32 h-32"
                   : flower.size === "large"
                   ? "w-48 h-48"

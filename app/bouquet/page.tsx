@@ -46,7 +46,7 @@ export default function Home({
       {/* Logo/Branding */}
       <Link href="/">
         <Image
-          src="/new-digibouquet.png"
+          src="/digibouquet.png"
           alt="digibouquet"
           width={200}
           height={80}

@@ -99,7 +99,7 @@ export default function BouquetCustomizer({
             className="uppercase"
             variant="default"
           >
-            Randomize Arrangement
+            Try a new Arrangement
           </Button>
         </div>
       </div>
@@ -108,77 +108,154 @@ export default function BouquetCustomizer({
         <div className="relative w-[500px] min-h-[420px]">
           {/* Bush background images - positioned absolutely to stay fixed */}
           {/* Bottom bush layer */}
-          <Image
-            src={`${mode}/bush/bush-1.png`}
-            alt="bush background"
-            width={500}
-            height={500}
-            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0 -top-[100px]"
-            priority
-          />
+          {mode !== "full" && (
+            <Image
+              src={`${mode}/bush/bush-1.png`}
+              alt="bush background"
+              width={500}
+              height={500}
+              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0 -top-[100px]"
+              priority
+            />
+          )}
 
           {/* Flower container - flowers can move around within this area */}
-          <div className="flex flex-wrap w-[300px] justify-center items-center -space-x-4 -space-y-20 relative m-auto">
-            {/* Map through each flower type and create individual flower instances */}
-            {bouquet.flowers.flatMap(
-              (
-                flower: {
-                  name: string;
-                  image: string;
-                  count: number;
-                  size: "small" | "medium" | "large";
-                },
-                flowerIndex: number
-              ) =>
-                // For each flower type, create the specified number of instances
-                Array(flower.count)
-                  .fill(null)
-                  .map((_, instanceIndex) => {
-                    // Generate random rotation for each flower (-5 to +5 degrees)
-                    const rotation = Math.random() * 10 - 5;
+          {mode !== "full" ? (
+            <div className="flex flex-wrap w-[300px] justify-center items-center -space-x-4 -space-y-20 relative m-auto">
+              {/* Map through each flower type and create individual flower instances */}
+              {bouquet.flowers.flatMap(
+                (
+                  flower: {
+                    name: string;
+                    image: string;
+                    count: number;
+                    size: "small" | "medium" | "large";
+                  },
+                  flowerIndex: number
+                ) =>
+                  // For each flower type, create the specified number of instances
+                  Array(flower.count)
+                    .fill(null)
+                    .map((_, instanceIndex) => {
+                      // Determine the visual order of this flower instance
+                      // If flowerOrder exists, use it; otherwise use default order
+                      const index = flowerOrder.length
+                        ? flowerOrder[
+                            flowerIndex * flower.count + instanceIndex
+                          ] ?? flowerIndex * flower.count + instanceIndex
+                        : flowerIndex * flower.count + instanceIndex;
 
-                    // Determine the visual order of this flower instance
-                    // If flowerOrder exists, use it; otherwise use default order
-                    const index = flowerOrder.length
-                      ? flowerOrder[
-                          flowerIndex * flower.count + instanceIndex
-                        ] ?? flowerIndex * flower.count + instanceIndex
-                      : flowerIndex * flower.count + instanceIndex;
+                      // Get dimensions based on flower size
+                      const dimensions = getFlowerDimensions(flower.size);
 
-                    // Get dimensions based on flower size
-                    const dimensions = getFlowerDimensions(flower.size);
+                      return (
+                        <div
+                          key={`${flowerIndex}-${instanceIndex}`}
+                          className="flex items-center justify-center pt-4 relative"
+                          style={{ order: index }} // CSS order property controls visual arrangement
+                        >
+                          {/* Individual flower image */}
+                          <Image
+                            src={`${mode}/flowers/${flower.name}.png`}
+                            alt={flower.name}
+                            width={dimensions}
+                            height={dimensions}
+                            className="relative z-10 transition-transform hover:scale-105"
+                            style={{
+                              transform: `rotate(${Math.random() * 10 - 5}deg)`,
+                            }} // Apply random rotation
+                            priority
+                          />
+                        </div>
+                      );
+                    })
+              )}
+            </div>
+          ) : (
+            <div className="relative w-[550px] h-[600px] m-auto">
+              {/* Full mode flower mapping with absolute positioning for overlapping */}
+              {bouquet.flowers.flatMap(
+                (
+                  flower: {
+                    name: string;
+                    image: string;
+                    count: number;
+                    size: "small" | "medium" | "large";
+                  },
+                  flowerIndex: number
+                ) =>
+                  // For each flower type, create the specified number of instances
+                  Array(flower.count)
+                    .fill(null)
+                    .map((_, instanceIndex) => {
+                      // Determine the visual order of this flower instance
+                      // If flowerOrder exists, use it; otherwise use default order
+                      const index = flowerOrder.length
+                        ? flowerOrder[
+                            flowerIndex * flower.count + instanceIndex
+                          ] ?? flowerIndex * flower.count + instanceIndex
+                        : flowerIndex * flower.count + instanceIndex;
 
-                    return (
-                      <div
-                        key={`${flowerIndex}-${instanceIndex}`}
-                        className="flex items-center justify-center pt-4 relative"
-                        style={{ order: index }} // CSS order property controls visual arrangement
-                      >
-                        {/* Individual flower image */}
-                        <Image
-                          src={`${mode}/flowers/${flower.name}.png`}
-                          alt={flower.name}
-                          width={dimensions}
-                          height={dimensions}
-                          className="relative z-10 transition-transform hover:scale-105"
-                          style={{ transform: `rotate(${rotation}deg)` }} // Apply random rotation
-                          priority
-                        />
-                      </div>
-                    );
-                  })
-            )}
-          </div>
+                      // Get dimensions based on flower size
+                      const dimensions = getFlowerDimensions(flower.size);
+
+                      // Calculate position for overlapping effect
+                      const baseX = 200 + (index % 4) * 50; // 4 flowers per row, much tighter spacing
+                      const baseY = 100 + Math.floor(index / 4) * 50; // 50px vertical overlap
+                      const randomOffsetX = (Math.random() - 0.5) * 30; // ±15px random X (much smaller)
+                      const randomOffsetY = (Math.random() - 0.5) * 50; // ±25px random Y
+
+                      // Symmetrical rotation based on position in row (0-3)
+                      const positionInRow = index % 4;
+                      const rotation =
+                        positionInRow === 0
+                          ? -15 // Leftmost flower tilts left
+                          : positionInRow === 1
+                          ? -5 // Second flower slight left
+                          : positionInRow === 2
+                          ? 5 // Third flower slight right
+                          : positionInRow === 3
+                          ? 15 // Rightmost flower tilts right
+                          : 0; // Fallback
+
+                      return (
+                        <div
+                          key={`${flowerIndex}-${instanceIndex}`}
+                          className="absolute"
+                          style={{
+                            left: `${baseX + randomOffsetX}px`,
+                            top: `${baseY + randomOffsetY}px`,
+                            zIndex: index, // Higher index = higher z-index
+                          }}
+                        >
+                          {/* Individual flower image */}
+                          <Image
+                            src={`${mode}/flowers/${flower.name}.png`}
+                            alt={flower.name}
+                            width={dimensions}
+                            height={dimensions}
+                            className="transition-transform hover:scale-105"
+                            style={{ transform: `rotate(${rotation}deg)` }} // Apply symmetrical rotation
+                            priority
+                          />
+                        </div>
+                      );
+                    })
+              )}
+            </div>
+          )}
 
           {/* Top bush layer - positioned above flowers */}
-          <Image
-            src={`${mode}/bush/bush-1-top.png`}
-            alt="bush top"
-            width={500}
-            height={500}
-            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 -top-[100px]"
-            priority
-          />
+          {mode !== "full" && (
+            <Image
+              src={`${mode}/bush/bush-1-top.png`}
+              alt="bush top"
+              width={500}
+              height={500}
+              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 -top-[100px]"
+              priority
+            />
+          )}
         </div>
       </div>
     </div>

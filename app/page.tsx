@@ -15,7 +15,7 @@ export default function Home() {
         />
 
         <Image
-          src="new-digibouquet.png"
+          src="digibouquet.png"
           alt="digibouquet"
           width={600}
           height={400}
