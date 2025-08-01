@@ -35,7 +35,7 @@ export default function Bouquet({
 
   return (
     <div className="text-center">
-      <div className="flex flex-col max-w-lg mx-auto bg-[#E3E3C2] rounded-full">
+      <div className="flex flex-col max-w-lg mx-auto bg-[#F5F5DC] rounded-full">
         <div className="flex items-center justify-center relative py-4 my-4">
           <div className="relative w-[500px] min-h-[410px]">
             {/* Bush background images - positioned absolutely to stay fixed */}
