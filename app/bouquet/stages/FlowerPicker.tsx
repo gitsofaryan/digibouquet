@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast";
 import Image from "next/image";
 import { flowers } from "../../data/data";
 
@@ -20,58 +18,51 @@ const flowersData = flowers as Array<{
 export default function FlowerPicker({
   bouquet,
   setBouquet,
-  mode,
 }: {
-  // Bouquet state - contains all selected flowers with their counts
+  // Simplified bouquet state - just flower IDs and counts
   bouquet: {
     flowers: Array<{
       id: number;
-      name: string;
-      meaning: string;
-      birthMonth: string;
-      size: "small" | "medium" | "large";
-      color?: string;
       count: number;
     }>;
+    letter: {
+      sender: string;
+      recipient: string;
+      message: string;
+    };
+    greenery: number;
+    timestamp: number;
+    mode: string;
+    flowerOrder?: number[];
   };
   // Function to update the bouquet state
   setBouquet: (
     bouquet:
       | {
-          flowers: Array<{
-            id: number;
-            name: string;
-            meaning: string;
-            birthMonth: string;
-            size: "small" | "medium" | "large";
-            color?: string;
-            count: number;
-          }>;
+          flowers?: Array<{ id: number; count: number }>;
+          greenery?: number;
+          timestamp?: number;
+          mode?: string;
+          flowerOrder?: number[];
+          letter?: {
+            sender?: string;
+            recipient?: string;
+            message?: string;
+          };
         }
       | ((prev: {
-          flowers: Array<{
-            id: number;
-            name: string;
-            meaning: string;
-            birthMonth: string;
-            size: "small" | "medium" | "large";
-            color?: string;
-            count: number;
-          }>;
-        }) => {
-          flowers: Array<{
-            id: number;
-            name: string;
-            meaning: string;
-            birthMonth: string;
-            size: "small" | "medium" | "large";
-            color?: string;
-            count: number;
-          }>;
-        })
+          flowers: Array<{ id: number; count: number }>;
+          greenery: number;
+          timestamp: number;
+          mode: string;
+          flowerOrder?: number[];
+          letter: {
+            sender: string;
+            recipient: string;
+            message: string;
+          };
+        }) => any)
   ) => void;
-  // Mode parameter - can be "mono" or "full" for different styling/behavior
-  mode: string;
 }) {
   // Track which flower is currently being hovered over for tooltip display
   const [hoveredFlower, setHoveredFlower] = useState<{
@@ -87,8 +78,7 @@ export default function FlowerPicker({
   // This creates a lookup table: flowerId -> count
   const selectedFlowersMap: Record<number, number> = {};
   bouquet.flowers.forEach((flower) => {
-    selectedFlowersMap[flower.id] =
-      (selectedFlowersMap[flower.id] || 0) + flower.count;
+    selectedFlowersMap[flower.id] = flower.count;
   });
 
   // Calculate total number of flowers in the bouquet
@@ -106,16 +96,6 @@ export default function FlowerPicker({
     size: "small" | "medium" | "large";
     color?: string;
   }) => {
-    // Check if bouquet already has maximum flowers (10)
-    if (totalFlowers >= 10) {
-      toast({
-        title: "Too many flowers!",
-        description: "Your bouquet can have a maximum of 10 flowers.",
-        action: <ToastAction altText="OK">OK</ToastAction>,
-      });
-      return;
-    }
-
     // Update bouquet state
     setBouquet((prev) => {
       // Check if this flower type already exists in the bouquet
@@ -132,7 +112,7 @@ export default function FlowerPicker({
         // If flower doesn't exist, add it with count 1
         return {
           ...prev,
-          flowers: [...prev.flowers, { ...flower, count: 1 }],
+          flowers: [...prev.flowers, { id: flower.id, count: 1 }],
         };
       }
     });
@@ -166,7 +146,14 @@ export default function FlowerPicker({
   return (
     <div className="text-center  dfont-crimson h-full">
       {/* Page title */}
-      <h2 className="text-md uppercase mb-4 ">Pick SOME Flowers</h2>
+      <h2 className="text-md uppercase mb-4 ">Pick some Flowers</h2>
+
+      {/* Help text - only show if flowers are selected */}
+      {totalFlowers > 0 && (
+        <p className="text-sm opacity-50 mb-8">
+          Pick 6 to 10 blooms. Click on a flower's name to deselect it.
+        </p>
+      )}
 
       {/* Grid of available flowers */}
       <div className="flex flex-wrap justify-center gap-4 mb-8 items-center min-h-[200px]">
@@ -181,9 +168,7 @@ export default function FlowerPicker({
             {/* Flower image container with dynamic sizing based on flower size */}
             <div
               className={`${
-                mode === "full"
-                  ? "w-[150px] h-[258px]"
-                  : flower.size === "small"
+                flower.size === "small"
                   ? "w-32 h-32"
                   : flower.size === "large"
                   ? "w-48 h-48"
@@ -197,21 +182,17 @@ export default function FlowerPicker({
             >
               {/* Flower image */}
               <Image
-                src={"/" + mode + "/flowers/" + flower.name + ".png"}
+                src={"/" + bouquet.mode + "/flowers/" + flower.name + ".png"}
                 alt={flower.name}
                 width={
-                  mode === "full"
-                    ? 500
-                    : flower.size === "small"
+                  flower.size === "small"
                     ? 128
                     : flower.size === "large"
                     ? 192
                     : 160
                 }
                 height={
-                  mode === "full"
-                    ? 850
-                    : flower.size === "small"
+                  flower.size === "small"
                     ? 128
                     : flower.size === "large"
                     ? 192
@@ -263,13 +244,6 @@ export default function FlowerPicker({
             );
           })}
         </div>
-
-        {/* Help text - only show if flowers are selected */}
-        {totalFlowers > 0 && (
-          <p className="text-sm opacity-50 mt-6">
-            Pick 5 to 10 blooms. Click on a flower's name to deselect it.
-          </p>
-        )}
       </div>
     </div>
   );

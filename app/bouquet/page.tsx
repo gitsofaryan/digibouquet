@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import FlowerPicker from "./components/FlowerPicker";
-import BouquetCustomizer from "./components/BouquetCustomizer";
-import CardWriter from "./components/CardWriter";
-import ShareBouquet from "./components/ShareBouquet";
+import FlowerPicker from "./stages/FlowerPicker";
+import BouquetCustomizer from "./stages/BouquetCustomizer";
+import CardWriter from "./stages/CardWriter";
+import ShareBouquet from "./stages/ShareBouquet";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -25,16 +25,36 @@ export default function Home({
 
   // Store the bouquet data - persists across all steps
   // This is the main state that gets passed between components
-  const [bouquet, setBouquet] = useState<{ flowers: any[] }>({
-    flowers: [], // Start with empty bouquet
+  const [bouquet, setBouquet] = useState<{
+    mode: string;
+    flowers: Array<{ id: number; count: number }>;
+    letter: {
+      sender: string;
+      recipient: string;
+      message: string;
+      seal: number;
+    };
+    timestamp: number;
+    greenery: number;
+    flowerOrder?: number[];
+  }>({
+    mode: mode,
+    flowers: [],
+    letter: {
+      sender: "",
+      recipient: "",
+      message: "",
+      seal: 0,
+    },
+    greenery: 0,
+    timestamp: Date.now(),
   });
-
   // Calculate total flowers for button validation
   const totalFlowers = bouquet.flowers.reduce(
     (sum, flower) => sum + flower.count,
     0
   );
-  const canProceed = totalFlowers >= 5 && totalFlowers <= 10;
+  const canProceed = totalFlowers >= 6 && totalFlowers <= 10;
 
   // Navigation functions
   const nextStep = () =>
