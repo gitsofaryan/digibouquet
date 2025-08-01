@@ -3,7 +3,6 @@ import { flowers } from "../../data/data";
 
 export default function ShareBouquet({
   bouquet,
-  setBouquet,
 }: {
   // Simplified bouquet state - just flower IDs and counts
   bouquet: {
@@ -21,34 +20,6 @@ export default function ShareBouquet({
     mode: string;
     flowerOrder?: number[];
   };
-  // Function to update the bouquet state
-  setBouquet: (
-    bouquet:
-      | {
-          flowers?: Array<{ id: number; count: number }>;
-          greenery?: number;
-          timestamp?: number;
-          mode?: string;
-          flowerOrder?: number[];
-          letter?: {
-            sender?: string;
-            recipient?: string;
-            message?: string;
-          };
-        }
-      | ((prev: {
-          flowers: Array<{ id: number; count: number }>;
-          greenery: number;
-          timestamp: number;
-          mode: string;
-          flowerOrder?: number[];
-          letter: {
-            sender: string;
-            recipient: string;
-            message: string;
-          };
-        }) => any)
-  ) => void;
 }) {
   // Helper function to get flower dimensions based on size
   const getFlowerDimensions = (size: string) => {

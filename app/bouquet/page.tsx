@@ -32,7 +32,6 @@ export default function Home({
       sender: string;
       recipient: string;
       message: string;
-      seal: number;
     };
     timestamp: number;
     greenery: number;
@@ -44,7 +43,6 @@ export default function Home({
       sender: "",
       recipient: "",
       message: "",
-      seal: 0,
     },
     greenery: 0,
     timestamp: Date.now(),
@@ -79,20 +77,12 @@ export default function Home({
       <div className="flex-grow py-8">
         {/* Step 0: Flower Selection - Users pick flowers for their bouquet */}
         {currentStep === 0 && (
-          <FlowerPicker
-            bouquet={bouquet}
-            setBouquet={setBouquet}
-            mode={mode} // Pass mode to determine styling/behavior
-          />
+          <FlowerPicker bouquet={bouquet} setBouquet={setBouquet} />
         )}
 
         {/* Step 1: Bouquet Customization - Users arrange and customize their flowers */}
         {currentStep === 1 && (
-          <BouquetCustomizer
-            bouquet={bouquet}
-            setBouquet={setBouquet}
-            mode={mode} // Pass mode to determine styling/behavior
-          />
+          <BouquetCustomizer bouquet={bouquet} setBouquet={setBouquet} />
         )}
 
         {/* Step 2: Card Writing - Users write a message for their bouquet */}
