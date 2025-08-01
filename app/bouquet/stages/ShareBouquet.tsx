@@ -51,14 +51,6 @@ export default function ShareBouquet({
     greenery: number;
     flowerOrder?: number[];
   }) => {
-    console.log(bouquet);
-    console.log(bouquet.flowerOrder);
-    console.log(bouquet.letter);
-    console.log(bouquet.flowers);
-    console.log(bouquet.greenery);
-    console.log(bouquet.mode);
-    console.log(bouquet.timestamp);
-
     const short_id = nanoid(8);
 
     const { data, error } = await supabase

@@ -29,7 +29,7 @@ export default function Home() {
             href="/bouquet?mode=color"
             className="text-sm px-8 py-4 bg-[#000000] text-[#F5F5DC] hover:bg-[#0A0000]/90 m-2"
           >
-            FULL BLOOM
+            BUILD A BOUQUET
           </Link>
 
           <Link
@@ -37,6 +37,12 @@ export default function Home() {
             className="text-sm px-8 py-4 border border-black text-[#000000] hover:bg-[#F5F5AC]/90 m-2"
           >
             MONO
+          </Link>
+          <Link
+            href="/garden"
+            className="text-sm px-8 py-4 underline text-[#000000] m-2"
+          >
+            VIEW GARDEN
           </Link>
         </div>
       </div>
