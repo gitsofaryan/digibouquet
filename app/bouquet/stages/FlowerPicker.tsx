@@ -185,26 +185,28 @@ export default function FlowerPicker({
               }`}
             >
               {/* Flower image */}
-              <Image
-                src={"/" + bouquet.mode + "/flowers/" + flower.name + ".png"}
-                alt={flower.name}
-                width={
-                  flower.size === "small"
-                    ? 128
-                    : flower.size === "large"
-                    ? 192
-                    : 160
-                }
-                height={
-                  flower.size === "small"
-                    ? 128
-                    : flower.size === "large"
-                    ? 192
-                    : 160
-                }
-                className="object-cover"
-                priority
-              />
+              <button>
+                <Image
+                  src={"/" + bouquet.mode + "/flowers/" + flower.name + ".png"}
+                  alt={flower.name}
+                  width={
+                    flower.size === "small"
+                      ? 128
+                      : flower.size === "large"
+                      ? 192
+                      : 160
+                  }
+                  height={
+                    flower.size === "small"
+                      ? 128
+                      : flower.size === "large"
+                      ? 192
+                      : 160
+                  }
+                  className="object-cover"
+                  priority
+                />
+              </button>
             </div>
 
             {/* Count badge - shows how many of this flower are selected */}
