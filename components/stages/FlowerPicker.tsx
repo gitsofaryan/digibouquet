@@ -100,7 +100,7 @@ export default function FlowerPicker() {
                 onPointerDownOutside={(e) => e.preventDefault()}
                 side="bottom"
                 sideOffset={8}
-                className="z-10 p-2 w-40 rounded border shadow-lg bg-background border-primary sm:w-48"
+                className="z-10 p-2 w-40 text-center sm:w-48"
               >
                 <h3 className="font-bold uppercase text-md">{flower.name}</h3>
                 <p className="text-sm">{flower.meaning}</p>
