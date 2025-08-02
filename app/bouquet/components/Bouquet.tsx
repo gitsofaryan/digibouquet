@@ -1,26 +1,8 @@
 import Image from "next/image";
 import { flowers } from "../../data/data";
+import type { BouquetReadOnlyProps } from "@/types/bouquet";
 
-export default function Bouquet({
-  bouquet,
-}: {
-  // Simplified bouquet state - just flower IDs and counts
-  bouquet: {
-    flowers: Array<{
-      id: number;
-      count: number;
-    }>;
-    letter: {
-      sender: string;
-      recipient: string;
-      message: string;
-    };
-    greenery: number;
-    timestamp: number;
-    mode: string;
-    flowerOrder: number[];
-  };
-}) {
+export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
   // Helper function to get flower dimensions based on size
   const getFlowerDimensions = (size: string) => {
     switch (size) {

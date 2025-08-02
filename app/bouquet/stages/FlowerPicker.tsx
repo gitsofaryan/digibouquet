@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { flowers } from "../../data/data";
 import {
@@ -9,139 +8,19 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useBouquet } from "../../../context/BouquetContext";
+import { createFlowerCountMap } from "@/lib/bouquet-utils";
+import type { Flower } from "@/types/bouquet";
 
-// Type the flowers data from the imported data file
-// This ensures type safety when working with flower objects
-const flowersData = flowers as Array<{
-  id: number;
-  name: string;
-  meaning: string;
-  birthMonth: string;
-  size: "small" | "medium" | "large";
-  color?: string;
-}>;
+// Type the flowers data from the imported data file using the proper Flower interface
+const flowersData = flowers as Flower[];
 
-export default function FlowerPicker({
-  bouquet,
-  setBouquet,
-}: {
-  // Simplified bouquet state - just flower IDs and counts
-  bouquet: {
-    flowers: Array<{
-      id: number;
-      count: number;
-    }>;
-    letter: {
-      sender: string;
-      recipient: string;
-      message: string;
-    };
-    greenery: number;
-    timestamp: number;
-    mode: string;
-    flowerOrder: number[];
-  };
-  // Function to update the bouquet state
-  setBouquet: React.Dispatch<
-    React.SetStateAction<{
-      flowers: Array<{ id: number; count: number }>;
-      greenery: number;
-      timestamp: number;
-      mode: string;
-      flowerOrder: number[];
-      letter: {
-        sender: string;
-        recipient: string;
-        message: string;
-      };
-    }>
-  >;
-}) {
+export default function FlowerPicker() {
+  const { bouquet, totalFlowers, addFlower, removeFlower } = useBouquet();
+
   // Convert bouquet flowers array to a map for easier counting and display
-  // This creates a lookup table: flowerId -> count
-  const selectedFlowersMap: Record<number, number> = {};
-  bouquet.flowers.forEach((flower) => {
-    selectedFlowersMap[flower.id] = flower.count;
-  });
-
-  // Calculate total number of flowers in the bouquet
-  const totalFlowers = Object.values(selectedFlowersMap).reduce(
-    (sum, count) => sum + count,
-    0
-  );
-
-  // Helper function to generate default flower order
-  const generateDefaultFlowerOrder = (
-    flowers: Array<{ id: number; count: number }>
-  ) => {
-    const totalFlowers = flowers.reduce((sum, flower) => sum + flower.count, 0);
-    return Array.from({ length: totalFlowers }, (_, i) => i);
-  };
-
-  // Function to add a flower to the bouquet
-  const addFlower = (flower: {
-    id: number;
-    name: string;
-    meaning: string;
-    birthMonth: string;
-    size: "small" | "medium" | "large";
-    color?: string;
-  }) => {
-    // Update bouquet state
-    setBouquet((prev) => {
-      // Check if this flower type already exists in the bouquet
-      const existingFlower = prev.flowers.find((f) => f.id === flower.id);
-      let newFlowers;
-
-      if (existingFlower) {
-        // If flower exists, increase its count
-        newFlowers = prev.flowers.map((f) =>
-          f.id === flower.id ? { ...f, count: f.count + 1 } : f
-        );
-      } else {
-        // If flower doesn't exist, add it with count 1
-        newFlowers = [...prev.flowers, { id: flower.id, count: 1 }];
-      }
-
-      // Generate new flower order for the updated flowers
-      const newFlowerOrder = generateDefaultFlowerOrder(newFlowers);
-
-      return {
-        ...prev,
-        flowers: newFlowers,
-        flowerOrder: newFlowerOrder,
-      };
-    });
-  };
-
-  // Function to remove a flower from the bouquet
-  const removeFlower = (flowerId: number) => {
-    setBouquet((prev) => {
-      // Find the flower to remove
-      const existingFlower = prev.flowers.find((f) => f.id === flowerId);
-      if (!existingFlower) return prev; // If flower doesn't exist, do nothing
-
-      let newFlowers;
-      if (existingFlower.count <= 1) {
-        // If count is 1 or less, remove the flower entirely
-        newFlowers = prev.flowers.filter((f) => f.id !== flowerId);
-      } else {
-        // If count is more than 1, decrease the count
-        newFlowers = prev.flowers.map((f) =>
-          f.id === flowerId ? { ...f, count: f.count - 1 } : f
-        );
-      }
-
-      // Generate new flower order for the updated flowers
-      const newFlowerOrder = generateDefaultFlowerOrder(newFlowers);
-
-      return {
-        ...prev,
-        flowers: newFlowers,
-        flowerOrder: newFlowerOrder,
-      };
-    });
-  };
+  // This creates a lookup table: flowerId -> count using utility function
+  const selectedFlowersMap = createFlowerCountMap(bouquet.flowers);
 
   return (
     <TooltipProvider disableHoverableContent delayDuration={0}>

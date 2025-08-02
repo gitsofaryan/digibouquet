@@ -4,27 +4,11 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
 import Bouquet from "../components/Bouquet";
+import { useBouquet } from "../../../context/BouquetContext";
+import type { Bouquet as BouquetType } from "@/types/bouquet";
 
-export default function ShareBouquet({
-  bouquet,
-}: {
-  // Simplified bouquet state - just flower IDs and counts
-  bouquet: {
-    flowers: Array<{
-      id: number;
-      count: number;
-    }>;
-    letter: {
-      sender: string;
-      recipient: string;
-      message: string;
-    };
-    greenery: number;
-    timestamp: number;
-    mode: string;
-    flowerOrder: number[];
-  };
-}) {
+export default function ShareBouquet() {
+  const { bouquet } = useBouquet();
   // Helper function to get flower dimensions based on size
   const getFlowerDimensions = (size: string) => {
     switch (size) {
@@ -39,18 +23,7 @@ export default function ShareBouquet({
 
   const router = useRouter();
 
-  const handleCreateBouquet = async (bouquet: {
-    mode: string;
-    flowers: Array<{ id: number; count: number }>;
-    letter: {
-      sender: string;
-      recipient: string;
-      message: string;
-    };
-    timestamp: number;
-    greenery: number;
-    flowerOrder: number[];
-  }) => {
+  const handleCreateBouquet = async (bouquet: BouquetType) => {
     const short_id = nanoid(8);
 
     const { data, error } = await supabase

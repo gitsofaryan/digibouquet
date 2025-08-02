@@ -1,40 +1,8 @@
 import Image from "next/image";
+import { useBouquet } from "../../../context/BouquetContext";
 
-export default function CardWriter({
-  bouquet,
-  setBouquet,
-}: {
-  // Simplified bouquet state - just flower IDs and counts
-  bouquet: {
-    flowers: Array<{
-      id: number;
-      count: number;
-    }>;
-    letter: {
-      sender: string;
-      recipient: string;
-      message: string;
-    };
-    greenery: number;
-    timestamp: number;
-    mode: string;
-    flowerOrder: number[];
-  };
-  setBouquet: React.Dispatch<
-    React.SetStateAction<{
-      flowers: Array<{ id: number; count: number }>;
-      greenery: number;
-      timestamp: number;
-      mode: string;
-      flowerOrder: number[];
-      letter: {
-        sender: string;
-        recipient: string;
-        message: string;
-      };
-    }>
-  >;
-}) {
+export default function CardWriter() {
+  const { bouquet, setBouquet } = useBouquet();
   return (
     <div className="text-center">
       <div>

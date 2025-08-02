@@ -2,44 +2,10 @@
 
 import Image from "next/image";
 import { flowers } from "../../data/data";
+import { useBouquet } from "../../../context/BouquetContext";
 
-export default function BouquetCustomizer({
-  bouquet,
-  setBouquet,
-}: {
-  // Simplified bouquet state - just flower IDs and counts
-  bouquet: {
-    flowers: Array<{
-      id: number;
-      count: number;
-    }>;
-    letter: {
-      sender: string;
-      recipient: string;
-      message: string;
-    };
-    greenery: number;
-    timestamp: number;
-    mode: string;
-    flowerOrder: number[];
-  };
-  // Function to update the bouquet state
-  // Mode parameter - can be "mono" or "full" for different styling/behavior
-  setBouquet: React.Dispatch<
-    React.SetStateAction<{
-      flowers: Array<{ id: number; count: number }>;
-      greenery: number;
-      timestamp: number;
-      mode: string;
-      flowerOrder: number[];
-      letter: {
-        sender: string;
-        recipient: string;
-        message: string;
-      };
-    }>
-  >;
-}) {
+export default function BouquetCustomizer() {
+  const { bouquet, setBouquet } = useBouquet();
   // Function to randomize the arrangement of flowers
   const randomizeFlowers = () => {
     // Calculate total number of individual flowers (not flower types)
@@ -81,30 +47,30 @@ export default function BouquetCustomizer({
   };
 
   return (
-    <div className="flex flex-col max-w-screen-lg mx-auto">
+    <div className="flex flex-col mx-auto max-w-screen-lg">
       {/* Left sidebar - contains customization controls */}
-      <div className=" p-6">
-        <h2 className="text-md uppercase text-center mb-6">
+      <div className="p-6">
+        <h2 className="mb-6 text-center uppercase text-md">
           Customize Your Bouquet
         </h2>
-        <div className="space-y-4 flex flex-col items-center justify-center">
+        <div className="flex flex-col justify-center items-center space-y-4">
           {/* Randomize button - shuffles the flower arrangement */}
           <button
             onClick={randomizeFlowers}
-            className="uppercase text-white bg-black px-5 py-3"
+            className="px-5 py-3 text-white uppercase bg-black"
           >
             Try a new Arrangement
           </button>
           <button
             onClick={changeGreenery}
-            className="uppercase text-black border border-black px-5 py-3"
+            className="px-5 py-3 text-black uppercase border border-black"
           >
             Change Greenery
           </button>
         </div>
       </div>
 
-      <div className="flex items-center justify-center relative py-4 my-16">
+      <div className="flex relative justify-center items-center py-4 my-16">
         <div className="relative w-[500px] min-h-[410px]">
           {/* Bush background images - positioned absolutely to stay fixed */}
           {/* Bottom bush layer */}
@@ -114,7 +80,7 @@ export default function BouquetCustomizer({
             alt="bush background"
             width={600}
             height={500}
-            className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0"
+            className="absolute top-1/2 left-1/2 z-0 transform -translate-x-1/2 -translate-y-1/2"
             priority
           />
 
@@ -150,12 +116,12 @@ export default function BouquetCustomizer({
                     return (
                       <div
                         key={`${flowerIndex}-${instanceIndex}`}
-                        className="flex items-center justify-center pt-4 relative"
+                        className="flex relative justify-center items-center pt-4"
                         style={{ order: index }} // CSS order property controls visual arrangement
                       >
                         {/* Individual flower image */}
                         <Image
-                          src={`${bouquet.mode}/flowers/${flowerData.name}.png`}
+                          src={`/${bouquet.mode}/flowers/${flowerData.name}.png`}
                           alt={flowerData.name}
                           width={dimensions}
                           height={dimensions}
@@ -178,7 +144,7 @@ export default function BouquetCustomizer({
               alt="bush top"
               width={600}
               height={500}
-              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
+              className="absolute top-1/2 left-1/2 z-10 transform -translate-x-1/2 -translate-y-1/2"
               priority
             />
           </div>

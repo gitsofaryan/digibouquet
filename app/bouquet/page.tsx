@@ -7,53 +7,17 @@ import CardWriter from "./stages/CardWriter";
 import ShareBouquet from "./stages/ShareBouquet";
 import Image from "next/image";
 import Link from "next/link";
+import { BouquetProvider, useBouquet } from "../../context/BouquetContext";
 
 // Define the 4 steps of the bouquet creation process
 const steps = ["Pick Flowers", "Customize Bouquet", "Write Card", "Share"];
 
-export default function Home({
-  searchParams,
-}: {
-  searchParams: { mode?: string }; // URL parameters - allows different modes (mono/full)
-}) {
-  // Extract mode from URL params, default to "mono" if not specified
-  // This allows different styling/functionality based on mode
-  const mode = searchParams.mode || "mono"; // default to mono if no mode specified
+// Inner component that uses the bouquet context
+function BouquetCreationFlow() {
+  const { bouquet, canProceed } = useBouquet();
 
   // Track which step the user is currently on (0-3)
   const [currentStep, setCurrentStep] = useState(0);
-
-  // Store the bouquet data - persists across all steps
-  // This is the main state that gets passed between components
-  const [bouquet, setBouquet] = useState<{
-    mode: string;
-    flowers: Array<{ id: number; count: number }>;
-    letter: {
-      sender: string;
-      recipient: string;
-      message: string;
-    };
-    timestamp: number;
-    greenery: number;
-    flowerOrder: number[];
-  }>({
-    mode: mode,
-    flowers: [],
-    letter: {
-      sender: "",
-      recipient: "",
-      message: "",
-    },
-    greenery: 0,
-    timestamp: Date.now(),
-    flowerOrder: [],
-  });
-  // Calculate total flowers for button validation
-  const totalFlowers = bouquet.flowers.reduce(
-    (sum, flower) => sum + flower.count,
-    0
-  );
-  const canProceed = totalFlowers >= 6 && totalFlowers <= 10;
 
   // Navigation functions
   const nextStep = () =>
@@ -77,22 +41,16 @@ export default function Home({
       {/* Main content area - renders different components based on current step */}
       <div className="flex-grow py-8">
         {/* Step 0: Flower Selection - Users pick flowers for their bouquet */}
-        {currentStep === 0 && (
-          <FlowerPicker bouquet={bouquet} setBouquet={setBouquet} />
-        )}
+        {currentStep === 0 && <FlowerPicker />}
 
         {/* Step 1: Bouquet Customization - Users arrange and customize their flowers */}
-        {currentStep === 1 && (
-          <BouquetCustomizer bouquet={bouquet} setBouquet={setBouquet} />
-        )}
+        {currentStep === 1 && <BouquetCustomizer />}
 
         {/* Step 2: Card Writing - Users write a message for their bouquet */}
-        {currentStep === 2 && (
-          <CardWriter bouquet={bouquet} setBouquet={setBouquet} />
-        )}
+        {currentStep === 2 && <CardWriter />}
 
         {/* Step 3: Sharing - Users can share their completed bouquet */}
-        {currentStep === 3 && <ShareBouquet bouquet={bouquet} />}
+        {currentStep === 3 && <ShareBouquet />}
       </div>
 
       {/* Navigation buttons */}
@@ -123,5 +81,22 @@ export default function Home({
         )}
       </div>
     </main>
+  );
+}
+
+// Main component that provides the context
+export default function Home({
+  searchParams,
+}: {
+  searchParams: { mode?: string }; // URL parameters - allows different modes (mono/full)
+}) {
+  // Extract mode from URL params, default to "mono" if not specified
+  // This allows different styling/functionality based on mode
+  const mode = searchParams.mode || "mono"; // default to mono if no mode specified
+
+  return (
+    <BouquetProvider mode={mode}>
+      <BouquetCreationFlow />
+    </BouquetProvider>
   );
 }
