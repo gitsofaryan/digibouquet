@@ -5,12 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface Params {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default async function BouquetPage({ params }: Params) {
+export default async function BouquetPage(props: Params) {
+  const params = await props.params;
   const { id } = params;
 
   const { data, error } = await supabase
