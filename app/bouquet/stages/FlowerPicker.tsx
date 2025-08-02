@@ -3,6 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { flowers } from "../../data/data";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Type the flowers data from the imported data file
 // This ensures type safety when working with flower objects
@@ -51,16 +57,6 @@ export default function FlowerPicker({
     }>
   >;
 }) {
-  // Track which flower is currently being hovered over for tooltip display
-  const [hoveredFlower, setHoveredFlower] = useState<{
-    id: number;
-    name: string;
-    meaning: string;
-    birthMonth: string;
-    size: "small" | "medium" | "large";
-    color?: string;
-  } | null>(null);
-
   // Convert bouquet flowers array to a map for easier counting and display
   // This creates a lookup table: flowerId -> count
   const selectedFlowersMap: Record<number, number> = {};
@@ -148,109 +144,115 @@ export default function FlowerPicker({
   };
 
   return (
-    <div className="text-center  dfont-crimson h-full">
-      {/* Page title */}
-      <h2 className="text-md uppercase mb-4 ">Pick 6 to 10 BLOOMS</h2>
+    <TooltipProvider disableHoverableContent delayDuration={0}>
+      <div className="h-full text-center dfont-crimson">
+        {/* Page title */}
+        <h2 className="mb-4 uppercase text-md">Pick 6 to 10 BLOOMS</h2>
 
-      {/* Help text - only show if flowers are selected */}
-      {totalFlowers > 0 && (
-        <p className="text-sm opacity-50 mb-8">
-          Click on a flower's name to deselect it.
-        </p>
-      )}
+        {/* Help text - only show if flowers are selected */}
+        {totalFlowers > 0 && (
+          <p className="mb-8 text-sm opacity-50">
+            Click on a flower's name to deselect it.
+          </p>
+        )}
 
-      {/* Grid of available flowers */}
-      <div className="flex flex-wrap justify-center gap-4 mb-8 items-center min-h-[200px]">
-        {flowersData.map((flower) => (
-          <div
-            key={flower.id}
-            className="relative cursor-pointer flex flex-col items-center"
-            onMouseEnter={() => setHoveredFlower(flower)} // Show tooltip on hover
-            onMouseLeave={() => setHoveredFlower(null)} // Hide tooltip on leave
-            onClick={() => addFlower(flower)} // Add flower on click
-          >
-            {/* Flower image container with dynamic sizing based on flower size */}
-            <div
-              className={`${
-                flower.size === "small"
-                  ? "w-32 h-32"
-                  : flower.size === "large"
-                  ? "w-48 h-48"
-                  : "w-40 h-40"
-              } flex items-center justify-center transition-transform duration-300 overflow-hidden ${
-                // Add hover/selection effect
-                hoveredFlower === flower || selectedFlowersMap[flower.id]
-                  ? "transform -translate-y-2"
-                  : ""
-              }`}
-            >
-              {/* Flower image */}
-              <button>
-                <Image
-                  src={"/" + bouquet.mode + "/flowers/" + flower.name + ".png"}
-                  alt={flower.name}
-                  width={
-                    flower.size === "small"
-                      ? 128
-                      : flower.size === "large"
-                      ? 192
-                      : 160
-                  }
-                  height={
-                    flower.size === "small"
-                      ? 128
-                      : flower.size === "large"
-                      ? 192
-                      : 160
-                  }
-                  className="object-cover"
-                  priority
-                />
-              </button>
-            </div>
+        {/* Grid of available flowers */}
+        <div className="flex flex-wrap justify-center gap-4 mb-8 items-center min-h-[200px]">
+          {flowersData.map((flower) => (
+            <Tooltip key={flower.id}>
+              <TooltipTrigger asChild>
+                <button
+                  className="flex relative flex-col items-center cursor-pointer"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    addFlower(flower);
+                  }} // Add flower on click
+                >
+                  {/* Flower image container with dynamic sizing based on flower size */}
+                  <div
+                    className={`${
+                      flower.size === "small"
+                        ? "w-32 h-32"
+                        : flower.size === "large"
+                        ? "w-48 h-48"
+                        : "w-40 h-40"
+                    } flex items-center justify-center transition-transform duration-300 overflow-hidden ${
+                      // Add selection effect
+                      selectedFlowersMap[flower.id]
+                        ? "transform -translate-y-2"
+                        : ""
+                    } hover:transform hover:-translate-y-2`}
+                  >
+                    {/* Flower image */}
 
-            {/* Count badge - shows how many of this flower are selected */}
-            {selectedFlowersMap[flower.id] && (
-              <div className="absolute top-0 right-0 bg-primary text-primary-foreground rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center text-xs ">
-                {selectedFlowersMap[flower.id]}
-              </div>
-            )}
+                    <Image
+                      src={
+                        "/" + bouquet.mode + "/flowers/" + flower.name + ".png"
+                      }
+                      alt={flower.name}
+                      width={
+                        flower.size === "small"
+                          ? 128
+                          : flower.size === "large"
+                          ? 192
+                          : 160
+                      }
+                      height={
+                        flower.size === "small"
+                          ? 128
+                          : flower.size === "large"
+                          ? 192
+                          : 160
+                      }
+                      className="object-cover"
+                      priority
+                    />
+                  </div>
 
-            {/* Tooltip - shows flower details on hover */}
-            {hoveredFlower === flower && (
-              <div className="absolute top-full mt-2 bg-background border border-primary p-2 rounded shadow-lg z-10 w-40 sm:w-48">
-                <h3 className="text-md font-bold ">
-                  {flower.name.toUpperCase()}
-                </h3>
-                <p className="text-sm ">{flower.meaning}</p>
-                <p className="text-sm ">Birth Month: {flower.birthMonth}</p>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Selected flowers summary */}
-      <div className="mt-4">
-        {/* List of selected flowers with counts - clickable to remove */}
-        <div className="flex flex-wrap justify-center gap-2 mt-2">
-          {Object.entries(selectedFlowersMap).map(([id, count]) => {
-            const flower = flowersData.find(
-              (f) => f.id === Number.parseInt(id)
-            );
-            if (!flower) return null;
-            return (
-              <div
-                key={id}
-                className="border border-primary rounded text-primary rounded-full px-3 py-1 text-sm  cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
-                onClick={() => removeFlower(Number.parseInt(id))} // Remove flower on click
+                  {/* Count badge - shows how many of this flower are selected */}
+                  {selectedFlowersMap[flower.id] && (
+                    <div className="flex absolute top-0 right-0 justify-center items-center w-5 h-5 text-xs rounded-full bg-primary text-primary-foreground sm:w-6 sm:h-6">
+                      {selectedFlowersMap[flower.id]}
+                    </div>
+                  )}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent
+                onPointerDownOutside={(e) => e.preventDefault()}
+                side="bottom"
+                sideOffset={8}
+                className="z-10 p-2 w-40 rounded border shadow-lg bg-background border-primary sm:w-48"
               >
-                {flower.name.toUpperCase()} x{count}
-              </div>
-            );
-          })}
+                <h3 className="font-bold uppercase text-md">{flower.name}</h3>
+                <p className="text-sm">{flower.meaning}</p>
+                <p className="text-sm">Birth Month: {flower.birthMonth}</p>
+              </TooltipContent>
+            </Tooltip>
+          ))}
+        </div>
+
+        {/* Selected flowers summary */}
+        <div className="mt-4">
+          {/* List of selected flowers with counts - clickable to remove */}
+          <div className="flex flex-wrap gap-2 justify-center mt-2">
+            {Object.entries(selectedFlowersMap).map(([id, count]) => {
+              const flower = flowersData.find(
+                (f) => f.id === Number.parseInt(id)
+              );
+              if (!flower) return null;
+              return (
+                <div
+                  key={id}
+                  className="px-3 py-1 text-sm rounded-full border transition-colors cursor-pointer border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                  onClick={() => removeFlower(Number.parseInt(id))} // Remove flower on click
+                >
+                  {flower.name.toUpperCase()} x{count}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }
