@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { flowers } from "../../data/data";
-import { useBouquet } from "../../../context/BouquetContext";
+import { useBouquet } from "../../context/BouquetContext";
 
 export default function BouquetCustomizer() {
   const { bouquet, setBouquet } = useBouquet();

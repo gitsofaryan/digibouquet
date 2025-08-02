@@ -1,6 +1,6 @@
 // app/bouquet/[id]/page.tsx
 import { supabase } from "@/lib/supabase"; // we'll make this below
-import Bouquet from "../components/Bouquet";
+import Bouquet from "../../../components/bouquet/Bouquet";
 import Image from "next/image";
 import Link from "next/link";
 

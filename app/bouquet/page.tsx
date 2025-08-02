@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import FlowerPicker from "./stages/FlowerPicker";
-import BouquetCustomizer from "./stages/BouquetCustomizer";
-import CardWriter from "./stages/CardWriter";
-import ShareBouquet from "./stages/ShareBouquet";
+import FlowerPicker from "../../components/stages/FlowerPicker";
+import BouquetCustomizer from "../../components/stages/BouquetCustomizer";
+import CardWriter from "../../components/stages/CardWriter";
+import ShareBouquet from "../../components/stages/ShareBouquet";
 import Image from "next/image";
 import Link from "next/link";
 import { BouquetProvider, useBouquet } from "../../context/BouquetContext";
@@ -25,7 +25,7 @@ function BouquetCreationFlow() {
   const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0)); // Move backward, but don't go below 0
 
   return (
-    <main className="container mx-auto p-4 flex flex-col">
+    <main className="container flex flex-col p-4 mx-auto">
       {/* Logo/Branding */}
       <Link href="/">
         <Image
@@ -54,7 +54,7 @@ function BouquetCreationFlow() {
       </div>
 
       {/* Navigation buttons */}
-      <div className="m-auto flex flex-row justify-center gap-4">
+      <div className="flex flex-row gap-4 justify-center m-auto">
         {/* Back button - only show if not on first step */}
         {currentStep > 0 && (
           <button

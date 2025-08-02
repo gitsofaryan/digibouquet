@@ -8,7 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useBouquet } from "../../../context/BouquetContext";
+import { useBouquet } from "../../context/BouquetContext";
 import { createFlowerCountMap } from "@/lib/bouquet-utils";
 import type { Flower } from "@/types/bouquet";
 

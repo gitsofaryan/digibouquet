@@ -18,7 +18,7 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
   return (
     <div className="text-center">
       <div className="flex flex-col max-w-lg mx-auto bg-[#F5F5DC] rounded-full">
-        <div className="flex items-center justify-center relative py-4 my-4">
+        <div className="flex relative justify-center items-center py-4 my-4">
           <div className="relative w-[500px] min-h-[410px]">
             {/* Bush background images - positioned absolutely to stay fixed */}
             {/* Bottom bush layer */}
@@ -28,7 +28,7 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
               alt="bush background"
               width={600}
               height={500}
-              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-0"
+              className="absolute top-1/2 left-1/2 z-0 transform -translate-x-1/2 -translate-y-1/2"
               priority
             />
 
@@ -67,7 +67,7 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
                       return (
                         <div
                           key={`${flowerIndex}-${instanceIndex}`}
-                          className="flex items-center justify-center pt-4 relative"
+                          className="flex relative justify-center items-center pt-4"
                           style={{ order: index }} // CSS order property controls visual arrangement
                         >
                           {/* Individual flower image */}
@@ -97,20 +97,20 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
                 alt="bush top"
                 width={600}
                 height={500}
-                className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
+                className="absolute top-1/2 left-1/2 z-10 transform -translate-x-1/2 -translate-y-1/2"
                 priority
               />
             </div>
           </div>
         </div>
       </div>
-      <div className="text-center max-w-sm text-sm mx-auto">
+      <div className="mx-auto max-w-sm text-sm text-center">
         <div>
           {/* White card container with black border */}
           <div className="bg-white border-[1.5px] border-black p-8 mx-auto -translate-y-[50px] -rotate-2 hover:-rotate-2 transition-all duration-300">
             <div className="space-y-4">
-              <div className="flex flex-row items-left justify-left gap-2">
-                <p className="border-none bg-transparent focus:outline-none focus:ring-0">
+              <div className="flex flex-row gap-2 items-left justify-left">
+                <p className="bg-transparent border-none focus:outline-none focus:ring-0">
                   Dear {bouquet.letter.recipient}
                 </p>
               </div>
@@ -119,11 +119,11 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
                 <p>{bouquet.letter.message}</p>
               </div>
 
-              <div className="flex flex-col items-end justify-end gap-2">
-                <p className="border-none bg-transparent focus:outline-none focus:ring-0">
+              <div className="flex flex-col gap-2 justify-end items-end">
+                <p className="bg-transparent border-none focus:outline-none focus:ring-0">
                   Sincerely,
                 </p>
-                <p className="border-none bg-transparent focus:outline-none focus:ring-0">
+                <p className="bg-transparent border-none focus:outline-none focus:ring-0">
                   {bouquet.letter.sender}
                 </p>
               </div>

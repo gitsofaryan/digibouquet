@@ -2,7 +2,7 @@
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 import Link from "next/link";
-import BouquetOnly from "../bouquet/components/BouquetOnly";
+import BouquetOnly from "../../components/bouquet/BouquetOnly";
 
 export default async function AllBouquetsPage() {
   const { data, error } = await supabase

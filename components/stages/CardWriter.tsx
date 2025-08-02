@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useBouquet } from "../../../context/BouquetContext";
+import { useBouquet } from "../../context/BouquetContext";
 
 export default function CardWriter() {
   const { bouquet, setBouquet } = useBouquet();

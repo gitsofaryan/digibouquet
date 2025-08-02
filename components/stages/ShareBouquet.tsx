@@ -3,8 +3,8 @@ import { flowers } from "../../data/data";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
-import Bouquet from "../components/Bouquet";
-import { useBouquet } from "../../../context/BouquetContext";
+import Bouquet from "../bouquet/Bouquet";
+import { useBouquet } from "../../context/BouquetContext";
 import type { Bouquet as BouquetType } from "@/types/bouquet";
 
 export default function ShareBouquet() {
