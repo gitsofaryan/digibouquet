@@ -47,7 +47,7 @@ export default async function BouquetPage({ params }: Params) {
           @pau_wee_
         </Link>
       </p>
-      <Link href="" className="text-sm underline text-gray-500 mt-2">
+      <Link href="/" className="text-sm underline text-gray-500 mt-2">
         make a bouquet now!
       </Link>
     </div>
