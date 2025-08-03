@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { flowers } from "../../data/data";
+import { flowers } from "@/data/data";
 
 export default function Bouquet({
   bouquet,
