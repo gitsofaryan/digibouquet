@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { flowers } from "../../data/data";
+import { flowers } from "@/data/data";
 
 // Type the flowers data from the imported data file
 // This ensures type safety when working with flower objects
