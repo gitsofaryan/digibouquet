@@ -1,16 +1,17 @@
 // app/bouquet/[id]/page.tsx
 import { supabase } from "@/lib/supabase"; // we'll make this below
-import Bouquet from "../components/Bouquet";
+import Bouquet from "../../../components/bouquet/Bouquet";
 import Image from "next/image";
 import Link from "next/link";
 
 interface Params {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default async function BouquetPage({ params }: Params) {
+export default async function BouquetPage(props: Params) {
+  const params = await props.params;
   const { id } = params;
 
   const { data, error } = await supabase

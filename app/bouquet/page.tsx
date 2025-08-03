@@ -1,127 +1,17 @@
-"use client";
+import { BouquetProvider } from "../../context/BouquetContext";
+import BouquetCreationFlow from "../../components/bouquet/BouquetCreationFlow";
 
-import { useState } from "react";
-import FlowerPicker from "./stages/FlowerPicker";
-import BouquetCustomizer from "./stages/BouquetCustomizer";
-import CardWriter from "./stages/CardWriter";
-import ShareBouquet from "./stages/ShareBouquet";
-import Image from "next/image";
-import Link from "next/link";
-
-// Define the 4 steps of the bouquet creation process
-const steps = ["Pick Flowers", "Customize Bouquet", "Write Card", "Share"];
-
-export default function Home({
-  searchParams,
-}: {
-  searchParams: { mode?: string }; // URL parameters - allows different modes (mono/full)
+// Main component that provides the context
+export default async function Home(props: {
+  searchParams: Promise<{ mode?: string }>;
 }) {
   // Extract mode from URL params, default to "mono" if not specified
   // This allows different styling/functionality based on mode
-  const mode = searchParams.mode || "mono"; // default to mono if no mode specified
-
-  // Track which step the user is currently on (0-3)
-  const [currentStep, setCurrentStep] = useState(0);
-
-  // Store the bouquet data - persists across all steps
-  // This is the main state that gets passed between components
-  const [bouquet, setBouquet] = useState<{
-    mode: string;
-    flowers: Array<{ id: number; count: number }>;
-    letter: {
-      sender: string;
-      recipient: string;
-      message: string;
-    };
-    timestamp: number;
-    greenery: number;
-    flowerOrder: number[];
-  }>({
-    mode: mode,
-    flowers: [],
-    letter: {
-      sender: "",
-      recipient: "",
-      message: "",
-    },
-    greenery: 0,
-    timestamp: Date.now(),
-    flowerOrder: [],
-  });
-  // Calculate total flowers for button validation
-  const totalFlowers = bouquet.flowers.reduce(
-    (sum, flower) => sum + flower.count,
-    0
-  );
-  const canProceed = totalFlowers >= 6 && totalFlowers <= 10;
-
-  // Navigation functions
-  const nextStep = () =>
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1)); // Move forward, but don't exceed max step
-  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0)); // Move backward, but don't go below 0
+  const mode = (await props.searchParams).mode || "mono";
 
   return (
-    <main className="container mx-auto p-4 flex flex-col">
-      {/* Logo/Branding */}
-      <Link href="/">
-        <Image
-          src="/digibouquet.png"
-          alt="digibouquet"
-          width={200}
-          height={80}
-          className="object-cover mx-auto mt-6"
-          priority
-        />
-      </Link>
-
-      {/* Main content area - renders different components based on current step */}
-      <div className="flex-grow py-8">
-        {/* Step 0: Flower Selection - Users pick flowers for their bouquet */}
-        {currentStep === 0 && (
-          <FlowerPicker bouquet={bouquet} setBouquet={setBouquet} />
-        )}
-
-        {/* Step 1: Bouquet Customization - Users arrange and customize their flowers */}
-        {currentStep === 1 && (
-          <BouquetCustomizer bouquet={bouquet} setBouquet={setBouquet} />
-        )}
-
-        {/* Step 2: Card Writing - Users write a message for their bouquet */}
-        {currentStep === 2 && (
-          <CardWriter bouquet={bouquet} setBouquet={setBouquet} />
-        )}
-
-        {/* Step 3: Sharing - Users can share their completed bouquet */}
-        {currentStep === 3 && <ShareBouquet bouquet={bouquet} />}
-      </div>
-
-      {/* Navigation buttons */}
-      <div className="m-auto flex flex-row justify-center gap-4">
-        {/* Back button - only show if not on first step */}
-        {currentStep > 0 && (
-          <button
-            onClick={prevStep}
-            className="text-sm px-4 py-2 border border-[#000000]"
-          >
-            BACK
-          </button>
-        )}
-
-        {/* Next button - only show if not on last step */}
-        {currentStep < steps.length - 1 && (
-          <button
-            onClick={nextStep}
-            disabled={!canProceed}
-            className={`text-sm px-4 py-2 ml-auto ${
-              canProceed
-                ? "bg-[#000000] text-[#F5F5DC]"
-                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-            }`}
-          >
-            NEXT
-          </button>
-        )}
-      </div>
-    </main>
+    <BouquetProvider mode={mode}>
+      <BouquetCreationFlow />
+    </BouquetProvider>
   );
 }
