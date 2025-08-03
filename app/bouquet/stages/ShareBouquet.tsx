@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { flowers } from "../../data/data";
+import { flowers } from "@/data/data";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
