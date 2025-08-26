@@ -61,8 +61,8 @@ export default function BouquetOnly({ bouquet }: BouquetReadOnlyProps) {
                     // If flowerOrder exists, use it; otherwise use default order
                     const index = bouquet.flowerOrder?.length
                       ? bouquet.flowerOrder[
-                          flowerIndex * flower.count + instanceIndex
-                        ] ?? flowerIndex * flower.count + instanceIndex
+                      flowerIndex * flower.count + instanceIndex
+                      ] ?? flowerIndex * flower.count + instanceIndex
                       : flowerIndex * flower.count + instanceIndex;
 
                     // Get dimensions based on flower size

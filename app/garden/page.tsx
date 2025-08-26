@@ -4,11 +4,30 @@ import Image from "next/image";
 import Link from "next/link";
 import BouquetOnly from "../../components/bouquet/BouquetOnly";
 
+// Disable caching for this page to always fetch fresh data
+export const revalidate = 0;
+
 export default async function AllBouquetsPage() {
+  console.log("Fetching bouquets from database...");
+  
   const { data, error } = await supabase
     .from("bouquets")
     .select("*")
     .order("created_at", { ascending: false }); // optional: sort by latest
+
+  console.log("Raw data from Supabase:", data);
+  console.log("Error from Supabase:", error);
+
+  // Also try without ordering to see if that's the issue
+  if (!data && !error) {
+    console.log("Trying without ordering...");
+    const { data: fallbackData, error: fallbackError } = await supabase
+      .from("bouquets")
+      .select("*");
+    
+    console.log("Fallback data:", fallbackData);
+    console.log("Fallback error:", fallbackError);
+  }
 
   if (error) {
     console.error("Error fetching bouquets:", error);
@@ -71,29 +90,49 @@ export default async function AllBouquetsPage() {
 
       {/* Page title */}
       <h2 className="text-md uppercase mb-4 ">OUR GARDEN</h2>
-      <p className="text-sm opacity-50 mb-10">Thanks for stopping by!</p>
+      <p className="text-sm opacity-50 mb-4">Thanks for stopping by!</p>
+      
+      {/* Debug info */}
+      <div className="text-xs text-gray-400 mb-6">
+        Showing {transformedData.length} of {data?.length || 0} bouquets
+        <br />
+        Last updated: {new Date().toLocaleTimeString()}
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
-        {transformedData.map((bouquet) => {
-          // Add validation for individual bouquets
-          if (!bouquet.short_id) {
-            console.error('Bouquet missing short_id:', bouquet);
-            return null;
-          }
-
-          return (
-            <Link href={`/bouquet/${bouquet.short_id}`} key={bouquet.short_id}>
-              <div className="hover:scale-105 transition-transform cursor-pointer">
-                <div>
-                  <BouquetOnly bouquet={bouquet} />
+        {transformedData.length === 0 ? (
+          <div className="col-span-full text-center py-10">
+            <p className="text-gray-500">No bouquets to display</p>
+            <p className="text-sm text-gray-400 mt-2">
+              Total fetched: {data?.length || 0}
+            </p>
+          </div>
+        ) : (
+          transformedData.map((bouquet, index) => {
+            // Add validation for individual bouquets
+            if (!bouquet.short_id) {
+              console.error('Bouquet missing short_id:', bouquet);
+              return (
+                <div key={index} className="p-4 border border-red-200 bg-red-50">
+                  <p className="text-red-600 text-sm">Invalid bouquet data</p>
                 </div>
-                <p className="text-sm text-gray-500 m-10">
-                  {new Date(bouquet.created_at || bouquet.timestamp).toLocaleDateString()}
-                </p>
-              </div>
-            </Link>
-          );
-        })}
+              );
+            }
+
+            return (
+              <Link href={`/bouquet/${bouquet.short_id}`} key={bouquet.short_id}>
+                <div className="hover:scale-105 transition-transform cursor-pointer">
+                  <div>
+                    <BouquetOnly bouquet={bouquet} />
+                  </div>
+                  <p className="text-sm text-gray-500 m-10">
+                    {new Date(bouquet.created_at || bouquet.timestamp).toLocaleDateString()}
+                  </p>
+                </div>
+              </Link>
+            );
+          })
+        )}
       </div>
     </div>
   );

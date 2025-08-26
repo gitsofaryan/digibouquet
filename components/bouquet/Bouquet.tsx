@@ -17,7 +17,7 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
 
   // Ensure letter is properly structured
   let letter = bouquet.letter || { sender: "", recipient: "", message: "" };
-  
+
   // If letter is a string, parse it as JSON
   if (typeof letter === 'string') {
     try {
@@ -70,8 +70,8 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
                       const index =
                         bouquet.flowerOrder.length > 0
                           ? bouquet.flowerOrder[
-                              flowerIndex * flower.count + instanceIndex
-                            ] ?? flowerIndex * flower.count + instanceIndex
+                          flowerIndex * flower.count + instanceIndex
+                          ] ?? flowerIndex * flower.count + instanceIndex
                           : flowerIndex * flower.count + instanceIndex;
 
                       // Get dimensions based on flower size
@@ -104,9 +104,8 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
 
             <div>
               <Image
-                src={`/${bouquet.mode}/bush/bush-${
-                  bouquet.greenery + 1
-                }-top.png`}
+                src={`/${bouquet.mode}/bush/bush-${bouquet.greenery + 1
+                  }-top.png`}
                 alt="bush top"
                 width={600}
                 height={500}
