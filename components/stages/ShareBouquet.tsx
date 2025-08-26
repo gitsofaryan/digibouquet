@@ -6,9 +6,11 @@ import { nanoid } from "nanoid";
 import Bouquet from "../bouquet/Bouquet";
 import { useBouquet } from "../../context/BouquetContext";
 import type { Bouquet as BouquetType } from "@/types/bouquet";
+import { useState } from "react";
 
 export default function ShareBouquet() {
   const { bouquet } = useBouquet();
+  const [isCreating, setIsCreating] = useState(false);
   // Helper function to get flower dimensions based on size
   const getFlowerDimensions = (size: string) => {
     switch (size) {
@@ -24,30 +26,45 @@ export default function ShareBouquet() {
   const router = useRouter();
 
   const handleCreateBouquet = async (bouquet: BouquetType) => {
+    setIsCreating(true);
     const short_id = nanoid(8);
 
-    const { data, error } = await supabase
-      .from("bouquets")
-      .insert([
-        {
-          short_id: short_id,
-          mode: bouquet.mode,
-          flowers: bouquet.flowers,
-          letter: bouquet.letter,
-          timestamp: bouquet.timestamp,
-          greenery: bouquet.greenery,
-          flowerOrder: bouquet.flowerOrder,
-        },
-      ])
-      .select(); // returns inserted row(s)
+    try {
+      const { data, error } = await supabase
+        .from("bouquets")
+        .insert([
+          {
+            short_id: short_id,
+            mode: bouquet.mode,
+            flowers: bouquet.flowers,
+            letter: bouquet.letter,
+            timestamp: bouquet.timestamp,
+            greenery: bouquet.greenery,
+            flowerOrder: bouquet.flowerOrder,
+          },
+        ])
+        .select(); // returns inserted row(s)
 
-    if (error || !data || data.length === 0) {
-      console.error("Error creating bouquet:", error);
-      return;
+      if (error) {
+        console.error("Error creating bouquet:", error);
+        alert("Failed to create bouquet. Please try again.");
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        console.error("No data returned from insert");
+        alert("Failed to create bouquet. Please try again.");
+        return;
+      }
+
+      // Use the short_id we generated for the URL
+      router.push(`/bouquet/${short_id}`);
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setIsCreating(false);
     }
-
-    const bouquetId = data[0].id;
-    router.push(`/bouquet/${bouquetId}`);
   };
 
   return (
@@ -60,9 +77,14 @@ export default function ShareBouquet() {
           console.log("Sending bouquet");
           handleCreateBouquet(bouquet);
         }}
-        className="uppercase text-white bg-black px-5 py-3"
+        disabled={isCreating}
+        className={`uppercase text-white px-5 py-3 ${
+          isCreating 
+            ? "bg-gray-400 cursor-not-allowed" 
+            : "bg-black hover:bg-gray-800"
+        }`}
       >
-        CREATE SHAREABLE LINK
+        {isCreating ? "CREATING..." : "CREATE SHAREABLE LINK"}
       </button>
     </div>
   );

@@ -33,17 +33,16 @@ export default async function AllBouquetsPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
         {data.map((bouquet) => (
-          //   <Link href={`/bouquet/${bouquet.id}`} key={bouquet.id}>
-          <div>
+          <Link href={`/bouquet/${bouquet.short_id}`} key={bouquet.short_id}>
             <div>
-              <BouquetOnly bouquet={bouquet} />
+              <div>
+                <BouquetOnly bouquet={bouquet} />
+              </div>
+              <p className="text-sm text-gray-500 m-10">
+                {new Date(bouquet.created_at || bouquet.timestamp).toLocaleDateString()}
+              </p>
             </div>
-            <p className="text-sm text-gray-500 m-10">
-              {new Date(bouquet.created_at).toLocaleDateString()}
-            </p>
-          </div>
-
-          //   </Link>
+          </Link>
         ))}
       </div>
     </div>

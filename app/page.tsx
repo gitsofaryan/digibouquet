@@ -49,10 +49,10 @@ export default function Home() {
         <p className="mt-10 text-sm text-gray-500">
           made by{" "}
           <Link
-            href="https://x.com/pau_wee_"
+            href="https://instagram.com/arien_jain"
             className="mt-2 text-sm text-gray-500 underline"
           >
-            @pau_wee_
+            @arien_jain
           </Link>
         </p>
       </div>
