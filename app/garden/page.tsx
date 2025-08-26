@@ -41,8 +41,8 @@ export default async function AllBouquetsPage() {
   const transformedData = data.map(bouquet => {
     let parsedLetter;
     try {
-      parsedLetter = typeof bouquet.letter === 'string' 
-        ? JSON.parse(bouquet.letter) 
+      parsedLetter = typeof bouquet.letter === 'string'
+        ? JSON.parse(bouquet.letter)
         : bouquet.letter;
     } catch (e) {
       console.error('Failed to parse letter for bouquet:', bouquet.short_id, e);
@@ -80,7 +80,7 @@ export default async function AllBouquetsPage() {
             console.error('Bouquet missing short_id:', bouquet);
             return null;
           }
-          
+
           return (
             <Link href={`/bouquet/${bouquet.short_id}`} key={bouquet.short_id}>
               <div className="hover:scale-105 transition-transform cursor-pointer">

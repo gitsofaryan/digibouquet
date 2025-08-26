@@ -33,8 +33,8 @@ export default async function BouquetPage(props: Params) {
     bouquetData = {
       ...data,
       flowerOrder: data.flower_order || [], // Map snake_case to camelCase
-      letter: typeof data.letter === 'string' 
-        ? JSON.parse(data.letter) 
+      letter: typeof data.letter === 'string'
+        ? JSON.parse(data.letter)
         : data.letter || { sender: "", recipient: "", message: "" }, // Ensure letter is an object
     };
   } catch (e) {

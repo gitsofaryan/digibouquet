@@ -2,6 +2,7 @@ import type React from "react";
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Martian_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 
 const martianMono = Martian_Mono({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800"],
@@ -29,7 +30,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={martianMono.variable}>
-      <body className="font-martian">{children}</body>
+      <body className="font-martian">
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }
