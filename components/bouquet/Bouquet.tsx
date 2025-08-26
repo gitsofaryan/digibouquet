@@ -15,6 +15,19 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
     }
   };
 
+  // Ensure letter is properly structured
+  let letter = bouquet.letter || { sender: "", recipient: "", message: "" };
+  
+  // If letter is a string, parse it as JSON
+  if (typeof letter === 'string') {
+    try {
+      letter = JSON.parse(letter);
+    } catch (e) {
+      console.error('Failed to parse letter JSON:', e);
+      letter = { sender: "", recipient: "", message: "" };
+    }
+  }
+
   return (
     <div className="text-center">
       <div className="flex flex-col max-w-lg mx-auto bg-[#F5F5DC] rounded-full">
@@ -111,12 +124,12 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
             <div className="space-y-4">
               <div className="flex flex-row gap-2 items-left justify-left">
                 <p className="bg-transparent border-none focus:outline-none focus:ring-0">
-                  Dear {bouquet.letter.recipient}
+                  Dear {letter.recipient || "Friend"}
                 </p>
               </div>
 
               <div className="text-left">
-                <p>{bouquet.letter.message}</p>
+                <p>{letter.message || "Hope you enjoy this bouquet!"}</p>
               </div>
 
               <div className="flex flex-col gap-2 justify-end items-end">
@@ -124,7 +137,7 @@ export default function Bouquet({ bouquet }: BouquetReadOnlyProps) {
                   Sincerely,
                 </p>
                 <p className="bg-transparent border-none focus:outline-none focus:ring-0">
-                  {bouquet.letter.sender}
+                  {letter.sender || "Anonymous"}
                 </p>
               </div>
             </div>

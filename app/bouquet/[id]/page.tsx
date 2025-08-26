@@ -21,14 +21,22 @@ export default async function BouquetPage(props: Params) {
     .single();
 
   if (error || !data) {
+    console.error("Error fetching bouquet:", error);
     return <div>404 - Bouquet not found</div>;
   }
+
+  console.log("Raw data from Supabase:", data);
 
   // Transform database format to expected format
   const bouquetData = {
     ...data,
     flowerOrder: data.flower_order || [], // Map snake_case to camelCase
+    letter: typeof data.letter === 'string' 
+      ? JSON.parse(data.letter) 
+      : data.letter || { sender: "", recipient: "", message: "" }, // Ensure letter is an object
   };
+
+  console.log("Transformed bouquet data:", bouquetData);
 
   return (
     <div className="text-center p-6 bg-[#F9F9EE]">

@@ -18,6 +18,9 @@ export default async function AllBouquetsPage() {
   const transformedData = data.map(bouquet => ({
     ...bouquet,
     flowerOrder: bouquet.flower_order || [], // Map snake_case to camelCase
+    letter: typeof bouquet.letter === 'string' 
+      ? JSON.parse(bouquet.letter) 
+      : bouquet.letter || { sender: "", recipient: "", message: "" }, // Ensure letter is an object
   }));
 
   return (
