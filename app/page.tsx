@@ -15,7 +15,7 @@ export default function Home() {
         />
         <Image
           src="/digibouquet.png"
-          alt="digibouquet"
+          alt="bouquit"
           width={600}
           height={400}
           className="object-cover mx-auto"

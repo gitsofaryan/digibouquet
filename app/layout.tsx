@@ -13,12 +13,12 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.ico",
   },
-  title: "digibouquet",
+  title: "bouquit",
   description: "create and share a digital flower bouquet",
   openGraph: {
-    title: "digibouquet",
+    title: "bouquit",
     description: "create and share a digital flower bouquet",
-    images: ["https://digibouquet.vercel.app/metapreview.png"],
+    images: ["https://bouquit.vercel.app/metapreview.png"],
   },
 };
 

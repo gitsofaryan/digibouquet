@@ -30,6 +30,16 @@ export default function ShareBouquet() {
     const short_id = nanoid(8);
 
     try {
+      console.log("Creating bouquet with data:", {
+        short_id,
+        mode: bouquet.mode,
+        flowers: bouquet.flowers,
+        letter: bouquet.letter,
+        timestamp: new Date(bouquet.timestamp).toISOString(),
+        greenery: bouquet.greenery,
+        flower_order: bouquet.flowerOrder,
+      });
+
       const { data, error } = await supabase
         .from("bouquets")
         .insert([
@@ -38,16 +48,16 @@ export default function ShareBouquet() {
             mode: bouquet.mode,
             flowers: bouquet.flowers,
             letter: bouquet.letter,
-            timestamp: bouquet.timestamp,
+            timestamp: new Date(bouquet.timestamp).toISOString(),
             greenery: bouquet.greenery,
-            flowerOrder: bouquet.flowerOrder,
+            flower_order: bouquet.flowerOrder,
           },
         ])
         .select(); // returns inserted row(s)
 
       if (error) {
-        console.error("Error creating bouquet:", error);
-        alert("Failed to create bouquet. Please try again.");
+        console.error("Supabase error details:", error);
+        alert(`Failed to create bouquet: ${error.message || 'Unknown error'}`);
         return;
       }
 
@@ -57,6 +67,7 @@ export default function ShareBouquet() {
         return;
       }
 
+      console.log("Bouquet created successfully:", data[0]);
       // Use the short_id we generated for the URL
       router.push(`/bouquet/${short_id}`);
     } catch (err) {
@@ -78,11 +89,10 @@ export default function ShareBouquet() {
           handleCreateBouquet(bouquet);
         }}
         disabled={isCreating}
-        className={`uppercase text-white px-5 py-3 ${
-          isCreating 
-            ? "bg-gray-400 cursor-not-allowed" 
-            : "bg-black hover:bg-gray-800"
-        }`}
+        className={`uppercase text-white px-5 py-3 ${isCreating
+          ? "bg-gray-400 cursor-not-allowed"
+          : "bg-black hover:bg-gray-800"
+          }`}
       >
         {isCreating ? "CREATING..." : "CREATE SHAREABLE LINK"}
       </button>

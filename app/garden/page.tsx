@@ -14,6 +14,12 @@ export default async function AllBouquetsPage() {
     return <div>Error fetching bouquets.</div>;
   }
 
+  // Transform database format to expected format
+  const transformedData = data.map(bouquet => ({
+    ...bouquet,
+    flowerOrder: bouquet.flower_order || [], // Map snake_case to camelCase
+  }));
+
   return (
     <div className="text-center p-6">
       <Link href="/">
@@ -32,7 +38,7 @@ export default async function AllBouquetsPage() {
       <p className="text-sm opacity-50 mb-10">Thanks for stopping by!</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
-        {data.map((bouquet) => (
+        {transformedData.map((bouquet) => (
           <Link href={`/bouquet/${bouquet.short_id}`} key={bouquet.short_id}>
             <div>
               <div>

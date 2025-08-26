@@ -24,6 +24,12 @@ export default async function BouquetPage(props: Params) {
     return <div>404 - Bouquet not found</div>;
   }
 
+  // Transform database format to expected format
+  const bouquetData = {
+    ...data,
+    flowerOrder: data.flower_order || [], // Map snake_case to camelCase
+  };
+
   return (
     <div className="text-center p-6 bg-[#F9F9EE]">
       {/* Logo/Branding */}
@@ -38,7 +44,7 @@ export default async function BouquetPage(props: Params) {
         />
       </Link>
       <h2 className="text-lg mb-14 ">Hi, I made this bouquet for you!</h2>
-      <Bouquet bouquet={data} />
+      <Bouquet bouquet={bouquetData} />
       <p className="text-sm text-gray-500">
         made with digibouquet, a tool by{" "}
         <Link
