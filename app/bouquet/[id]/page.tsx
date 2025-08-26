@@ -28,13 +28,24 @@ export default async function BouquetPage(props: Params) {
   console.log("Raw data from Supabase:", data);
 
   // Transform database format to expected format
-  const bouquetData = {
-    ...data,
-    flowerOrder: data.flower_order || [], // Map snake_case to camelCase
-    letter: typeof data.letter === 'string' 
-      ? JSON.parse(data.letter) 
-      : data.letter || { sender: "", recipient: "", message: "" }, // Ensure letter is an object
-  };
+  let bouquetData;
+  try {
+    bouquetData = {
+      ...data,
+      flowerOrder: data.flower_order || [], // Map snake_case to camelCase
+      letter: typeof data.letter === 'string' 
+        ? JSON.parse(data.letter) 
+        : data.letter || { sender: "", recipient: "", message: "" }, // Ensure letter is an object
+    };
+  } catch (e) {
+    console.error('Error parsing bouquet data:', e);
+    return <div>Error loading bouquet data</div>;
+  }
+
+  // Validate essential data
+  if (!bouquetData.flowers || !Array.isArray(bouquetData.flowers)) {
+    return <div>Invalid bouquet data</div>;
+  }
 
   console.log("Transformed bouquet data:", bouquetData);
 

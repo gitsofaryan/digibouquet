@@ -15,6 +15,15 @@ export default function BouquetOnly({ bouquet }: BouquetReadOnlyProps) {
     }
   };
 
+  // Defensive checks
+  if (!bouquet || !bouquet.flowers || !Array.isArray(bouquet.flowers)) {
+    return <div>Invalid bouquet data</div>;
+  }
+
+  if (!bouquet.mode || bouquet.greenery === undefined) {
+    return <div>Missing bouquet configuration</div>;
+  }
+
   return (
     <div className="text-center">
       <div className="flex items-center justify-center relative py-4 my-4">
