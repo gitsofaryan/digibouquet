@@ -73,8 +73,8 @@ export default async function BouquetPage(props: Params) {
       <h2 className="text-lg mb-14 ">Hi, I made this bouquet for you!</h2>
       <Bouquet bouquet={bouquetData} />
       
-      {/* Share button also at the bottom for mobile */}
-      <div className="mt-4 mb-6 ml-[60%]">
+      {/* Share button centered below bouquet */}
+      <div className="mt-2 mb-6 flex justify-center">
         <ShareButton 
           url={currentUrl}
           title={shareTitle}

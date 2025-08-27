@@ -7,9 +7,15 @@ interface ShareButtonProps {
   url: string;
   title?: string;
   description?: string;
+  variant?: 'default' | 'right-aligned';
 }
 
-export default function ShareButton({ url, title = "Check out this beautiful bouquet!", description = "I made this digital bouquet for you" }: ShareButtonProps) {
+export default function ShareButton({ 
+  url, 
+  title = "Check out this beautiful bouquet!", 
+  description = "I made this digital bouquet for you",
+  variant = 'default'
+}: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -62,10 +68,10 @@ export default function ShareButton({ url, title = "Check out this beautiful bou
   };
 
   return (
-    <div className="relative">
+    <div className="relative inline-block">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+        className="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors shadow-md"
       >
         <Share2 size={16} />
         Share
@@ -79,13 +85,18 @@ export default function ShareButton({ url, title = "Check out this beautiful bou
             onClick={() => setIsOpen(false)}
           />
           
-          {/* Share menu */}
-          <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20">
-            <div className="p-2">
+          {/* Share menu - positioned above the button */}
+          <div className={`absolute bottom-full mb-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-20 transform ${
+            variant === 'right-aligned' ? 'right-0 origin-bottom-right' : 'left-0 origin-bottom-left'
+          }`}>
+            <div className="p-1">
               
               {/* Copy Link */}
               <button
-                onClick={copyToClipboard}
+                onClick={() => {
+                  copyToClipboard();
+                  setIsOpen(false);
+                }}
                 className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 rounded-md transition-colors"
               >
                 {copied ? (
@@ -93,7 +104,7 @@ export default function ShareButton({ url, title = "Check out this beautiful bou
                 ) : (
                   <Copy size={16} className="text-gray-600" />
                 )}
-                <span className="text-sm">
+                <span className="text-sm font-medium">
                   {copied ? "Copied!" : "Copy link"}
                 </span>
               </button>
@@ -101,39 +112,51 @@ export default function ShareButton({ url, title = "Check out this beautiful bou
               {/* Native Share (if supported) */}
               {typeof navigator !== 'undefined' && 'share' in navigator && (
                 <button
-                  onClick={shareViaNative}
+                  onClick={() => {
+                    shareViaNative();
+                    setIsOpen(false);
+                  }}
                   className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 rounded-md transition-colors"
                 >
                   <Share2 size={16} className="text-gray-600" />
-                  <span className="text-sm">Share...</span>
+                  <span className="text-sm font-medium">Share...</span>
                 </button>
               )}
 
-              <hr className="my-2 border-gray-200" />
+              <hr className="my-1 border-gray-200" />
 
               {/* Social Media Options */}
               <button
-                onClick={shareViaTwitter}
+                onClick={() => {
+                  shareViaTwitter();
+                  setIsOpen(false);
+                }}
                 className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 rounded-md transition-colors"
               >
                 <Twitter size={16} className="text-blue-400" />
-                <span className="text-sm">Share on Twitter</span>
+                <span className="text-sm font-medium">Share on Twitter</span>
               </button>
 
               <button
-                onClick={shareViaFacebook}
+                onClick={() => {
+                  shareViaFacebook();
+                  setIsOpen(false);
+                }}
                 className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 rounded-md transition-colors"
               >
                 <Facebook size={16} className="text-blue-600" />
-                <span className="text-sm">Share on Facebook</span>
+                <span className="text-sm font-medium">Share on Facebook</span>
               </button>
 
               <button
-                onClick={shareViaWhatsApp}
+                onClick={() => {
+                  shareViaWhatsApp();
+                  setIsOpen(false);
+                }}
                 className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-100 rounded-md transition-colors"
               >
                 <MessageCircle size={16} className="text-green-500" />
-                <span className="text-sm">Share on WhatsApp</span>
+                <span className="text-sm font-medium">Share on WhatsApp</span>
               </button>
             </div>
           </div>
