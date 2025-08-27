@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
 import Bouquet from "../bouquet/Bouquet";
+import ShareButton from "../ui/ShareButton";
 import { useBouquet } from "../../context/BouquetContext";
 import type { Bouquet as BouquetType } from "@/types/bouquet";
 import { useState } from "react";
@@ -11,6 +12,8 @@ import { useState } from "react";
 export default function ShareBouquet() {
   const { bouquet } = useBouquet();
   const [isCreating, setIsCreating] = useState(false);
+  const [createdBouquetId, setCreatedBouquetId] = useState<string | null>(null);
+  
   // Helper function to get flower dimensions based on size
   const getFlowerDimensions = (size: string) => {
     switch (size) {
@@ -68,8 +71,14 @@ export default function ShareBouquet() {
       }
 
       console.log("Bouquet created successfully:", data[0]);
-      // Use the short_id we generated for the URL
-      router.push(`/bouquet/${short_id}`);
+      
+      // Set the created bouquet ID to show share options
+      setCreatedBouquetId(short_id);
+      
+      // Optionally redirect after a delay
+      setTimeout(() => {
+        router.push(`/bouquet/${short_id}`);
+      }, 5000); // 5 second delay to allow sharing
     } catch (err) {
       console.error("Unexpected error:", err);
       alert("Something went wrong. Please try again.");
@@ -77,6 +86,40 @@ export default function ShareBouquet() {
       setIsCreating(false);
     }
   };
+
+  // If bouquet was created, show share options
+  if (createdBouquetId) {
+    const shareUrl = `https://bouquit.vercel.app/bouquet/${createdBouquetId}`;
+    const shareTitle = `Check out this beautiful bouquet from ${bouquet.letter?.sender || 'someone special'}!`;
+    const shareDescription = bouquet.letter?.message || "I made this digital bouquet for you";
+
+    return (
+      <div className="text-center">
+        <h2 className="text-md uppercase text-center mb-6">BOUQUET CREATED! 🎉</h2>
+        <p className="text-sm text-gray-600 mb-8">Share your beautiful bouquet with others</p>
+        
+        <Bouquet bouquet={bouquet} />
+        
+        <div className="mt-8 space-y-4">
+          <ShareButton 
+            url={shareUrl}
+            title={shareTitle}
+            description={shareDescription}
+          />
+          
+          <div className="text-sm text-gray-500">
+            <p>You'll be redirected to your bouquet in a few seconds...</p>
+            <button 
+              onClick={() => router.push(`/bouquet/${createdBouquetId}`)}
+              className="text-blue-500 underline"
+            >
+              Or click here to view now
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="text-center">

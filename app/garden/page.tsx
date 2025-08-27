@@ -9,7 +9,7 @@ export const revalidate = 0;
 
 export default async function AllBouquetsPage() {
   console.log("Fetching bouquets from database...");
-  
+
   const { data, error } = await supabase
     .from("bouquets")
     .select("*")
@@ -24,7 +24,7 @@ export default async function AllBouquetsPage() {
     const { data: fallbackData, error: fallbackError } = await supabase
       .from("bouquets")
       .select("*");
-    
+
     console.log("Fallback data:", fallbackData);
     console.log("Fallback error:", fallbackError);
   }
@@ -91,7 +91,7 @@ export default async function AllBouquetsPage() {
       {/* Page title */}
       <h2 className="text-md uppercase mb-4 ">OUR GARDEN</h2>
       <p className="text-sm opacity-50 mb-4">Thanks for stopping by!</p>
-      
+
       {/* Debug info */}
       <div className="text-xs text-gray-400 mb-6">
         Showing {transformedData.length} of {data?.length || 0} bouquets

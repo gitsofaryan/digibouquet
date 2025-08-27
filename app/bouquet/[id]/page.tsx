@@ -1,6 +1,7 @@
 // app/bouquet/[id]/page.tsx
 import { supabase } from "@/lib/supabase"; // we'll make this below
 import Bouquet from "../../../components/bouquet/Bouquet";
+import ShareButton from "../../../components/ui/ShareButton";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -49,6 +50,11 @@ export default async function BouquetPage(props: Params) {
 
   console.log("Transformed bouquet data:", bouquetData);
 
+  // Get the full URL for sharing
+  const currentUrl = `https://bouquit.vercel.app/bouquet/${id}`;
+  const shareTitle = `Check out this beautiful bouquet from ${bouquetData.letter?.sender || 'someone special'}!`;
+  const shareDescription = bouquetData.letter?.message || "I made this digital bouquet for you";
+
   return (
     <div className="text-center p-6 bg-[#F9F9EE]">
       {/* Logo/Branding */}
@@ -62,8 +68,19 @@ export default async function BouquetPage(props: Params) {
           priority
         />
       </Link>
+  
+
       <h2 className="text-lg mb-14 ">Hi, I made this bouquet for you!</h2>
       <Bouquet bouquet={bouquetData} />
+      
+      {/* Share button also at the bottom for mobile */}
+      <div className="mt-4 mb-6 ml-[60%]">
+        <ShareButton 
+          url={currentUrl}
+          title={shareTitle}
+          description={shareDescription}
+        />
+      </div>
       <p className="text-sm text-gray-500">
         made with <a href="https://bouquit.vercel.app/"><span className="text-blue-950 underline">bouquit</span></a>, a tool by{" "}
         <Link
